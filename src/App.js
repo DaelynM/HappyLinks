@@ -42,7 +42,7 @@ const App = () => {
         type: "light",
       },
       status: {
-        danger: "orange",
+        danger: "blue",
       },
       typography: {},
     });
