@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,11 +7,13 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+
+//firebase
+import { createProfileDoc, auth } from "../../Firebase/firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,6 +38,52 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const classes = useStyles();
 
+  const [signUpState, setSignUpState] = useState({
+    displayName: "",
+    email: "",
+    password: "",
+    comfirmPassword: "",
+  });
+
+  const { displayName, email, password, comfirmPassword } = signUpState;
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (password !== comfirmPassword) {
+      alert("passwords dont match");
+      return;
+    }
+
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        email,
+        password
+      );
+
+      await createProfileDoc(user, { displayName });
+
+      //this will clear my form
+      setSignUpState({
+        displayName: "",
+        email: "",
+        password: "",
+        comfirmPassword: "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateField = (e) => {
+    setSignUpState({
+      ...signUpState,
+      [e.target.name]: e.target.value,
+    });
+
+    console.log(e.target.name + " " + e.target.value);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -46,7 +94,7 @@ const SignUp = () => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -58,6 +106,7 @@ const SignUp = () => {
                 id="firstName"
                 label="First Name"
                 autoFocus
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -69,6 +118,7 @@ const SignUp = () => {
                 label="Last Name"
                 name="lastName"
                 autoComplete="lname"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={12}>
@@ -78,8 +128,10 @@ const SignUp = () => {
                 fullWidth
                 id="email"
                 label="Email Address"
+                type="email"
                 name="email"
                 autoComplete="email"
+                onChange={updateField}
               />
             </Grid>
             <Grid item xs={12}>
@@ -92,8 +144,22 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={updateField}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="comfirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="comfirmPassword"
+                onChange={updateField}
+              />
+            </Grid>
+
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}

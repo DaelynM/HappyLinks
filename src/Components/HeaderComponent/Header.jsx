@@ -1,13 +1,23 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { auth } from "../../Firebase/firebase";
+import { withRouter, Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ signedIn, match, history, location }) => {
   return (
     <div>
-      <Link to="/">SignIn</Link>
-      <Link to="/signup">SignUp</Link>
+      {signedIn ? (
+        <Link to="/" onClick={() => auth.signOut()}>
+          SignOut
+        </Link>
+      ) : (
+        <div>
+          <Link to="/">Home</Link>
+          <Link to="/signin">SignIn</Link>
+          <Link to="/signup">SignUp</Link>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Header;
+export default withRouter(Header);

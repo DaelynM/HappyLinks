@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 //Components
 import SignIn from "./Components/SignInComponent/SignIn";
 import SignUp from "./Components/SignUpComponent/SignUp";
@@ -7,80 +7,61 @@ import Copyright from "./Components/CopyRightComponent/CopyRight";
 import Header from "./Components/HeaderComponent/Header";
 
 //Material-Ui
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-import Blue from "@material-ui/core/colors/blue";
-import { Typography, Paper } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 //firebase
-import { auth } from "./Firebase/firebase";
+import { auth, firestore } from "./Firebase/firebase";
+import { createProfileDoc } from "./Firebase/firebase";
 
 //Styling
 import "./App.scss";
 
 const App = () => {
-  const [themeState, setThemeState] = useState(false);
-
-  const darkFunc = () => {
-    const theme = createMuiTheme({
-      palette: {
-        type: "dark",
-        primary: Blue,
-      },
-      status: {
-        danger: "orange",
-      },
-      typography: {},
-    });
-
-    return theme;
-  };
-
-  const lightFunc = () => {
-    const theme = createMuiTheme({
-      palette: {
-        type: "light",
-      },
-      status: {
-        danger: "blue",
-      },
-      typography: {},
-    });
-
-    return theme;
-  };
-
-  const [signedIn, setSignedIn] = useState(null);
+  const [signedIn, setSignedIn] = useState(null); //when i sign out / am signed out its null
 
   useEffect(() => {
-    const unsubsribeFromAuth = auth.onAuthStateChanged((e) => {
-      setSignedIn(e);
-      console.log(e);
+    const unsubsribeFromAuth = auth.onAuthStateChanged(async (userObj) => {
+      console.log("userObj", userObj);
+
+      if (userObj) {
+        const userReference = await createProfileDoc(userObj);
+
+        //this allows me to see the snapshot at the current interval in time, and shows me the data for the user thats signed in: use console.log("S", snapShot.data()); to see all the data
+        userReference.onSnapshot((snapShot) => {
+          setSignedIn({
+            id: snapShot.id,
+            ...snapShot.data(),
+          });
+        });
+      } else {
+        setSignedIn(userObj);
+      }
     });
 
     return () => unsubsribeFromAuth();
   }, []);
 
+  useEffect(() => {
+    console.log("cu", signedIn);
+  }, [signedIn]);
+
+  //TESTING SECTION
+
+  const test = firestore.collection("users").doc("OJEcQ19vm5Wsd3zZYkaU");
+  console.log(test);
+
+  //
+
   return (
-    <ThemeProvider theme={themeState ? lightFunc() : darkFunc()}>
-      <Paper>
-        <div>
-          <Header themeState={themeState} />
-          <Typography variant="h1" className="test" align="center">
-            Happy Links
-          </Typography>
-          <Route exact path="/" component={SignIn} />
-          <Route path="/SignUp" component={SignUp} />
-          <Switch
-            checked={themeState}
-            onChange={() => setThemeState(!themeState)}
-            name="checkedA"
-            inputProps={{ "aria-label": "secondary checkbox" }}
-          />
-          <Copyright />
-        </div>
-      </Paper>
-    </ThemeProvider>
+    <div>
+      <Header signedIn={signedIn} />
+      <Typography variant="h2" className="test" align="center">
+        Happy Links
+      </Typography>
+      <Route exact path="/" component={SignIn} />
+      <Route path="/SignUp" component={SignUp} />
+      <Copyright />
+    </div>
   );
 };
 
