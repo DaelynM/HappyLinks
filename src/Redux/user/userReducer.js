@@ -5,7 +5,7 @@ const INITIAL_STATE = {
 //state is something that the redux store passes to this reducer whenever an action fires
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case "SET_CURRENT_USER":
+    case "CURRENT_USER_STATE":
       return {
         ...state,
         currentUser: action.payload,

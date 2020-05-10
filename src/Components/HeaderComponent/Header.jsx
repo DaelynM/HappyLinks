@@ -1,8 +1,12 @@
 import React from "react";
 import { auth } from "../../Firebase/firebase";
 import { withRouter, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-const Header = ({ signedIn, match, history, location }) => {
+const Header = ({ match, history, location }) => {
+  const signedIn = useSelector((state) => state.user.currentUser);
+  console.log("signedIn", signedIn);
+
   return (
     <div>
       {signedIn ? (
@@ -14,6 +18,7 @@ const Header = ({ signedIn, match, history, location }) => {
           <Link to="/">Home</Link>
           <Link to="/signin">SignIn</Link>
           <Link to="/signup">SignUp</Link>
+          <Link to="/username">Username</Link>
         </div>
       )}
     </div>

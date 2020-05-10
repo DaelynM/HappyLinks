@@ -33,6 +33,7 @@ export const createProfileDoc = async (authParam, extraParam) => {
     const displayName = authParam.displayName;
     const createdAt = new Date();
     const founderAward = "Founder Award";
+    const username = null;
 
     const sendInfoToFirebase = async () => {
       let response = await fetch("https://api.ipify.org?format=json");
@@ -45,6 +46,7 @@ export const createProfileDoc = async (authParam, extraParam) => {
             createdAt,
             signUpIp,
             founderAward,
+            username,
             ...extraParam,
           });
         } catch (err) {

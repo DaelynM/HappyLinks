@@ -1,23 +1,27 @@
+//React and Hooks
 import React, { useState, useEffect } from "react";
-import { Route } from "react-router-dom";
 //Components
 import SignIn from "./Components/SignInComponent/SignIn";
 import SignUp from "./Components/SignUpComponent/SignUp";
 import Copyright from "./Components/CopyRightComponent/CopyRight";
 import Header from "./Components/HeaderComponent/Header";
-
+//Pages
+import UsernamePage from "./Pages/UsernamePage/UsernamePage";
+import ProfilePage from "./Pages/ProfilePage/ProfilePage";
+//Router
+import { Route, Redirect } from "react-router-dom";
+//Redux
+import { useDispatch, useSelector } from "react-redux";
+//Rirebase
+import { auth, createProfileDoc } from "./Firebase/firebase";
 //Material-Ui
 import { Typography } from "@material-ui/core";
-
-//firebase
-import { auth, firestore } from "./Firebase/firebase";
-import { createProfileDoc } from "./Firebase/firebase";
-
 //Styling
 import "./App.scss";
 
 const App = () => {
-  const [signedIn, setSignedIn] = useState(null); //when i sign out / am signed out its null
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
 
   useEffect(() => {
     const unsubsribeFromAuth = auth.onAuthStateChanged(async (userObj) => {
@@ -30,14 +34,20 @@ const App = () => {
         userReference.onSnapshot((snapShot) => {
           console.log("S", snapShot.data());
           //gets the id of the user, and assigns the data to it
-          setSignedIn({
-            id: snapShot.id,
-            ...snapShot.data(),
+          dispatch({
+            type: "CURRENT_USER_STATE",
+            payload: {
+              id: snapShot.id,
+              ...snapShot.data(),
+            },
           });
         });
       } else {
-        //pretty much just set the user back to null, as not signed in
-        setSignedIn(userObj);
+        //pretty much just set the user back to null, as not signed in user is signed out
+        dispatch({
+          type: "CURRENT_USER_STATE",
+          payload: userObj,
+        });
         console.log("userObjv2", userObj);
       }
     });
@@ -45,25 +55,31 @@ const App = () => {
     return () => unsubsribeFromAuth();
   }, []);
 
-  useEffect(() => {
-    console.log("cu", signedIn);
-  }, [signedIn]);
-
   //TESTING SECTION
+  // const test = firestore.collection("users").doc("OJEcQ19vm5Wsd3zZYkaU");
+  // console.log("test", test);
 
-  const test = firestore.collection("users").doc("OJEcQ19vm5Wsd3zZYkaU");
-  console.log("test", test);
-
-  //
+  const firstTimeSignin = () => {
+    console.log("currentUser", currentUser);
+    if (currentUser && currentUser.username == null) {
+      return currentUser ? <Redirect to="/username" /> : <SignIn />;
+    } else if (currentUser) {
+      return <Redirect to="/ProfilePage" />;
+    } else {
+      return <SignIn />;
+    }
+  };
 
   return (
     <div>
-      <Header signedIn={signedIn} />
+      <Header />
       <Typography variant="h2" className="test" align="center">
         Happy Links
       </Typography>
-      <Route exact path="/" component={SignIn} />
+      <Route exact path="/" render={firstTimeSignin} />
       <Route path="/SignUp" component={SignUp} />
+      <Route path="/Signin" render={firstTimeSignin} />
+      <Route path="/username" component={UsernamePage} />
       <Copyright />
     </div>
   );
