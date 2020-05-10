@@ -12,7 +12,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
-
 //firebase
 import { SignInWithGoogle, auth } from "../../Firebase/firebase";
 
@@ -37,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
   errorMessage: {
     margin: theme.spacing(3, 0, 2),
     color: theme.palette.secondary.main,
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
   },
 }));
 
