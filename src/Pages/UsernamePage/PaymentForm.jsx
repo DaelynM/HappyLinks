@@ -1,39 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import { useSelector } from "react-redux";
+import { firestore } from "../../Firebase/firebase";
 
 const PaymentForm = () => {
+  const userState = useSelector((state) => state.user.currentUser);
+
+  const updateField = async (e) => {
+    if (userState) {
+      const userReference = firestore.doc(`/users/${userState.id}`);
+      userReference.update({ linkObj: e.target.value });
+    }
+
+    console.log(e.target.name + " " + e.target.value);
+  };
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Payment method
+        Links
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} md={6}>
-          <TextField required id="cardName" label="Name on card" fullWidth />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField required id="cardNumber" label="Card number" fullWidth />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField required id="expDate" label="Expiry date" fullWidth />
-        </Grid>
-        <Grid item xs={12} md={6}>
           <TextField
             required
-            id="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
+            label="Link One"
             fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox color="secondary" name="saveCard" value="yes" />}
-            label="Remember credit card details for next time"
+            value={userState ? userState.linkObj : ""}
+            name="links"
+            onChange={updateField}
           />
         </Grid>
       </Grid>

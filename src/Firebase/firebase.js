@@ -13,13 +13,24 @@ var firebaseConfig = {
   measurementId: "G-VPGYN6462J",
 };
 
+// export const updateUsername = async (authParam, extraParam) => {
+//   if (authParam == null) {
+//     return;
+//   }
+//   const userReference = firestore.doc(`/users/${authParam.uid}`);
+//   //this is will give us the firebase snaphot object that tells if the user already exisits and their uid again
+//   const snapShot = await userReference.get();
+//   //logs that snapshot here
+//   console.log("Snapshot here", snapShot);
+// };
+
 export const createProfileDoc = async (authParam, extraParam) => {
   //take the userObj and checks if were signed in
   if (authParam == null) {
     return;
   }
   //loggs the uid of the user
-  console.log("auth", authParam.uid);
+  // console.log("auth", authParam.uid);
   //userReference will get the collection of the user with the uid / sign in user
   const userReference = firestore.doc(`/users/${authParam.uid}`);
   //this is will give us the firebase snaphot object that tells if the user already exisits and their uid again
@@ -34,6 +45,8 @@ export const createProfileDoc = async (authParam, extraParam) => {
     const createdAt = new Date();
     const founderAward = "Founder Award";
     const username = null;
+    const firstName = null;
+    const lastName = null;
 
     const sendInfoToFirebase = async () => {
       let response = await fetch("https://api.ipify.org?format=json");
@@ -42,6 +55,8 @@ export const createProfileDoc = async (authParam, extraParam) => {
         try {
           userReference.set({
             displayName,
+            firstName,
+            lastName,
             email,
             createdAt,
             signUpIp,

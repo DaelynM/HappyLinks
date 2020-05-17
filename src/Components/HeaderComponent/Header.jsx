@@ -10,9 +10,12 @@ const Header = ({ match, history, location }) => {
   return (
     <div>
       {signedIn ? (
-        <Link to="/" onClick={() => auth.signOut()}>
-          SignOut
-        </Link>
+        <div>
+          <Link to="/">Home </Link>
+          <Link to="/" onClick={() => auth.signOut()}>
+            SignOut
+          </Link>
+        </div>
       ) : (
         <div>
           <Link to="/">Home</Link>

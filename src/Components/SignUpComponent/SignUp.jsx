@@ -40,12 +40,21 @@ const SignUp = () => {
 
   const [signUpState, setSignUpState] = useState({
     displayName: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     comfirmPassword: "",
   });
 
-  const { displayName, email, password, comfirmPassword } = signUpState;
+  const {
+    displayName,
+    firstName,
+    lastName,
+    email,
+    password,
+    comfirmPassword,
+  } = signUpState;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -61,11 +70,14 @@ const SignUp = () => {
         password
       );
 
-      await createProfileDoc(user, { displayName });
+      await createProfileDoc(user, { displayName, firstName, lastName });
 
       //this will clear my form
+      console.log("clear");
       setSignUpState({
         displayName: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         comfirmPassword: "",

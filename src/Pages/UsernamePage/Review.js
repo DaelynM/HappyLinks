@@ -45,7 +45,7 @@ const Review = () => {
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
-        Order summary
+        Review Profile
       </Typography>
       <List disablePadding>
         {products.map((product) => (
