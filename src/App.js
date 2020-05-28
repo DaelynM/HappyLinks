@@ -1,5 +1,5 @@
 //React and Hooks
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext, useMemo } from "react";
 //Components
 import SignIn from "./Components/SignInComponent/SignIn";
 import SignUp from "./Components/SignUpComponent/SignUp";
@@ -20,7 +20,12 @@ import { Typography } from "@material-ui/core";
 
 import { firestore } from "./Firebase/firebase";
 
+import { UserContext } from "./Context/UserContext";
+
 const App = () => {
+  const { userContext, setUserContext } = useContext(UserContext);
+  console.log("Contex value", userContext);
+
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
 
@@ -35,6 +40,9 @@ const App = () => {
         userReference.onSnapshot((snapShot) => {
           console.log("S", snapShot.data());
           console.log("SID", snapShot.id);
+
+          setUserContext({ ...snapShot.data(), id: snapShot.id });
+
           //gets the id of the user, and assigns the data to it
           dispatch({
             type: "CURRENT_USER_STATE",
