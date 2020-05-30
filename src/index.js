@@ -12,7 +12,6 @@ const ContextLevel = () => {
   const [userContext, setUserContext] = useState(
     "Using context!!! Lets goooo!"
   );
-
   //wont re-render the component unless the value of setValue is different :0
   const memoizeValue = useMemo(() => ({ userContext, setUserContext }), [
     userContext,

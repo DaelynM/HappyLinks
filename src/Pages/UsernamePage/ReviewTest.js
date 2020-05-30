@@ -7,6 +7,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 import { UserContext } from "../../Context/UserContext";
 
+const products = [
+  { name: "Product 1", desc: "A nice thing", price: "$9.99" },
+  { name: "Product 2", desc: "Another thing", price: "$3.45" },
+  { name: "Product 3", desc: "Something else", price: "$6.51" },
+  { name: "Product 4", desc: "Best thing of all", price: "$14.11" },
+  { name: "Shipping", desc: "", price: "Free" },
+];
 const addresses = [
   "1 Material-UI Drive",
   "Reactville",
@@ -31,36 +38,43 @@ const useStyles = makeStyles((theme) => ({
   title: {
     marginTop: theme.spacing(2),
   },
+  sideText: {
+    marginRight: theme.spacing(3),
+    fontWeight: 700,
+  },
 }));
-
-const idShoterner = (e) => {
-  var newId = e.slice(0, 10);
-  console.log("newid", newId);
-  newId = newId.concat("...");
-  console.log("newid", newId);
-
-  return newId;
-};
 
 const Review = () => {
   const classes = useStyles();
-  const { userContext } = useContext(UserContext);
+
+  const { userContext, setUserContext } = useContext(UserContext);
 
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Review Profile
       </Typography>
+
+      <Typography
+        className={classes.title}
+        variant="subtitle1"
+        display="block"
+        gutterBottom
+      >
+        <span className={classes.sideText}>Full Name:</span>
+        <span alignCenter>
+          {userContext.firstName + " " + userContext.lastName}
+        </span>
+      </Typography>
+
       <List disablePadding>
-        {userContext.linkArray.map((e) => (
-          <ListItem className={classes.listItem} key={e.id}>
-            <ListItemText
-              primary={`Link ${e.url}`}
-              secondary={idShoterner(e.id)}
-            />
-            <Typography variant="body2">{e.url}</Typography>
-          </ListItem>
-        ))}
+        <ListItem className={classes.listItem} key={1}>
+          <ListItemText primary={"Full Name"} secondary={"Awesome Name"} />
+          <Typography variant="body2">
+            {userContext.firstName + " " + userContext.lastName}
+          </Typography>
+        </ListItem>
+
         <ListItem className={classes.listItem}>
           <ListItemText primary="Total" />
           <Typography variant="subtitle1" className={classes.total}>

@@ -1,20 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { auth } from "../../Firebase/firebase";
 import { withRouter, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+import { UserContext } from "../../Context/UserContext";
 
 const Header = ({ match, history, location }) => {
   const signedIn = useSelector((state) => state.user.currentUser);
   console.log("signedIn", signedIn);
 
+  const { userContext } = useContext(UserContext);
+  console.log("signedIn value", userContext);
+
   return (
     <div>
-      {signedIn ? (
+      {userContext ? (
         <div>
           <Link to="/">Home </Link>
           <Link to="/" onClick={() => auth.signOut()}>
             SignOut
           </Link>
+          <Link to="/username"> Username</Link>
         </div>
       ) : (
         <div>
