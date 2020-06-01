@@ -19,6 +19,9 @@ import { Typography } from "@material-ui/core";
 
 import { UserContext } from "./Context/UserContext";
 import { FormContext } from "./Context/FormContext";
+import Main from "./Pages/MultiStepForm/Main";
+
+import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 
 const App = () => {
   const { userContext, setUserContext } = useContext(UserContext);
@@ -76,6 +79,8 @@ const App = () => {
       <FormContext.Provider value={memoizeValue}>
         <Route path="/username" component={UsernamePage} />
       </FormContext.Provider>
+      <Route path="/form" component={Main} />
+      <Route path="/profile" component={ProfilePage} />
 
       {/*<Copyright/>*/}
     </div>

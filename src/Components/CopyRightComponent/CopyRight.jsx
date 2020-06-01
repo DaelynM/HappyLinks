@@ -14,6 +14,24 @@ const CopyRight = () => {
         {new Date().getFullYear()}
         {"."}
       </Typography>
+
+      <Divider style={{ marginTop: 100 }} />
+      <Typography
+        component="p"
+        align="center"
+        style={{ margin: "10px 0", fontSize: ".75rem" }}
+      >
+        Built with{" "}
+        <span role="img" aria-label="Emojis">
+          ❤️
+        </span>{" "}
+        by the{" "}
+        <a href="https://gkstyle.net/" title="GK STYLE">
+          {" "}
+          GK STYLE{" "}
+        </a>
+        team.
+      </Typography>
     </Box>
   );
 };

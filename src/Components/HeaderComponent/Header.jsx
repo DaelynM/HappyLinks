@@ -21,6 +21,8 @@ const Header = ({ match, history, location }) => {
             SignOut
           </Link>
           <Link to="/username"> Username</Link>
+          <Link to="/form"> Form</Link>
+          <Link to="/profile"> Profile</Link>
         </div>
       ) : (
         <div>
