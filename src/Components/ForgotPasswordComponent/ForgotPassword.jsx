@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -37,31 +37,55 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
     color: theme.palette.secondary.main,
   },
+  successMessage: {
+    margin: theme.spacing(3, 0, 2),
+    color: theme.palette.success.main,
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
   },
 }));
 
-const SignIn = () => {
+const ForgotPassword = () => {
   const classes = useStyles();
 
-  const [signInState, setSignInState] = useState({
-    email: "",
-    password: "",
-    validate: true,
-  });
+  const [forgotPass, setForgotPass] = useState("");
+  const [validation, setValidation] = useState(null);
 
-  const { email, password, validate } = signInState;
+  useEffect(() => {
+    console.log("forgotPass", forgotPass);
+  }, [forgotPass]);
+
+  // const { email, password, validate } = signInState;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      setValidation(true);
+      await auth.sendPasswordResetEmail(forgotPass);
     } catch (err) {
-      setSignInState({ ...signInState, validate: false });
+      setValidation(false);
       console.log("error occured when signing in");
+    }
+  };
+
+  const reportMsg = () => {
+    if (validation === false) {
+      return (
+        <p className={classes.errorMessage}>
+          Email did not match, please try again
+        </p>
+      );
+    } else if (validation === true) {
+      return (
+        <p className={classes.successMessage}>
+          Email has been sent, please check your inbox
+        </p>
+      );
+    } else {
+      return "";
     }
   };
 
@@ -73,13 +97,9 @@ const SignIn = () => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Forgot Password?
         </Typography>
-        {validate ? null : (
-          <p className={classes.errorMessage}>
-            Email or Password did not match, please try again
-          </p>
-        )}
+        {reportMsg()}
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             variant="outlined"
@@ -87,33 +107,14 @@ const SignIn = () => {
             required
             fullWidth
             id="email"
-            label="Email Address"
+            label="Email Address..."
             name="email"
-            autoComplete="email"
+            autoComplete="off"
             autoFocus
             type="email"
-            onChange={(e) =>
-              setSignInState({ ...signInState, email: e.target.value })
-            }
+            onChange={(e) => setForgotPass(e.target.value)}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(e) =>
-              setSignInState({ ...signInState, password: e.target.value })
-            }
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+
           <Button
             type="submit"
             fullWidth
@@ -121,32 +122,17 @@ const SignIn = () => {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Submit Password Reset
           </Button>
 
-          <Button
-            onClick={SignInWithGoogle}
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In With Google
-          </Button>
           <Typography align="center" variant="h6">
             Don't have an account yet?
           </Typography>
 
-          <Link variant="body2" component={RouterLink} to="/signup">
-            <Typography align="center" variant="subtitle1">
-              Sign up for HappyLinks.com
-            </Typography>
-          </Link>
-
           <Grid container>
             <Grid item xs>
-              <Link href="/forgot" variant="body2">
-                Forgot password?
+              <Link href="/" variant="body2">
+                Back
               </Link>
             </Grid>
             <Grid item>
@@ -161,4 +147,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgotPassword;

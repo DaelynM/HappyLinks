@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
@@ -10,7 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import AddressForm from "./AddressForm";
 import PaymentForm from "./PaymentForm";
 import Review from "./Review";
-import { FormContext } from "../../Context/FormContext";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -65,9 +64,6 @@ function getStepContent(step) {
 }
 
 const UsernamePage = () => {
-  const { formContext, setFormContext } = useContext(FormContext);
-  console.log("fromContext", formContext);
-
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 

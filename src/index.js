@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import store from "./Redux/store";
 import App from "./App";
-
 //Context
 import { UserContext } from "./Context/UserContext";
+//Material ui
+import theme from "./theme";
+import { ThemeProvider } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const ContextLevel = () => {
   const [userContext, setUserContext] = useState(
@@ -19,17 +20,19 @@ const ContextLevel = () => {
   ]);
 
   return (
-    <UserContext.Provider value={memoizeValue}>
-      <App />
-    </UserContext.Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+
+      <UserContext.Provider value={memoizeValue}>
+        <App />
+      </UserContext.Provider>
+    </ThemeProvider>
   );
 };
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <ContextLevel />
-    </BrowserRouter>
-  </Provider>,
+  <BrowserRouter>
+    <ContextLevel />
+  </BrowserRouter>,
   document.getElementById("root")
 );

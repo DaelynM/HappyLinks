@@ -7,11 +7,12 @@ import SecondStep from "./SecondStep";
 import Confirm from "./Confirm";
 import Success from "./Success";
 import { UserContext } from "../../Context/UserContext";
+import firebase, { firestore } from "../../Firebase/firebase";
 
 const emailRegex = RegExp(/^[^@]+@[^@]+\.[^@]+$/);
 const phoneRegex = RegExp(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4,6})$/);
 // Step titles
-const labels = ["Username", "Links", "Review"];
+const labels = ["Username", "Links", "Review Profile"];
 
 const StepForm = () => {
   const { userContext, setUserContext } = useContext(UserContext);
@@ -35,6 +36,22 @@ const StepForm = () => {
   // Go back to prev step
   const handleBack = () => setSteps(steps - 1);
 
+  const handleUsername = (value) => {
+    return firestore
+      .collection("users")
+      .where("username", "==", value)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          console.log("not taken top");
+          return false;
+        } else {
+          console.log("username taken top");
+          return true;
+        }
+      });
+  };
+
   // Handle fields change
   const handleChange = (input) => ({ target: { value } }) => {
     // Set values to the fields
@@ -49,7 +66,7 @@ const StepForm = () => {
 
     // Handle errors
     const formErrors = { ...filedError };
-    const lengthValidate = value.length > 0 && value.length < 1;
+    const lengthValidate = value.length > 0 && value.length < 3;
 
     switch (input) {
       case "city":
@@ -58,9 +75,19 @@ const StepForm = () => {
           : "";
         break;
       case "username":
-        formErrors.username = lengthValidate
-          ? "Minimum 1 characater required"
-          : "";
+        handleUsername(value).then((e) => {
+          formErrors.username = e
+            ? "username taken bottom"
+            : "not taken bottom";
+        });
+        // formErrors.username = lengthValidate
+        //   ? "Minimum 3 characaters required"
+        //   : "";
+        console.log("formErrors.username", formErrors.username);
+        handleUsername(value).then((e) => {
+          console.log("handleUsername(value)", e);
+        });
+
         break;
       default:
         break;

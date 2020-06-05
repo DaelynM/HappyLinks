@@ -59,6 +59,7 @@ const SecondStep = ({
                 required
                 label="Link"
                 fullWidth
+                type="url"
                 value={e.url || ""}
                 name="links"
                 onChange={(l) => {

@@ -1,19 +1,22 @@
 import React, { useContext } from "react";
 import { auth } from "../../Firebase/firebase";
 import { withRouter, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-
 import { UserContext } from "../../Context/UserContext";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  pad: {
+    paddingBottom: 12,
+  },
+});
 
 const Header = ({ match, history, location }) => {
-  const signedIn = useSelector((state) => state.user.currentUser);
-  console.log("signedIn", signedIn);
-
   const { userContext } = useContext(UserContext);
   console.log("signedIn value", userContext);
+  const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.pad}>
       {userContext ? (
         <div>
           <Link to="/">Home </Link>

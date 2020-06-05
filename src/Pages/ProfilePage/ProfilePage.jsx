@@ -1,65 +1,47 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
+import { Grid, Hidden, Avatar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Paper from "@material-ui/core/Paper";
+import SimpleProfileCard from "../../Components/SimpleProfileCard/SimpleProfileCard";
+import SimpleLinkCard from "../../Components/SimpleLinkCard/SimpleLinkCard";
+import { UserContext } from "../../Context/UserContext";
 
-import Typography from "@material-ui/core/Typography";
-import { red } from "@material-ui/core/colors";
+const useStyles = makeStyles({});
 
-const useStyles = makeStyles((theme) => ({
-  appBar: {
-    position: "relative",
-  },
-  layout: {
-    color: red,
-    width: "auto",
-    marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 900,
-      marginLeft: "auto",
-      marginRight: "auto",
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
-  },
-  stepper: {
-    padding: theme.spacing(3, 0, 5),
-  },
-  buttons: {
-    display: "flex",
-    justifyContent: "flex-end",
-  },
-  button: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(1),
-  },
-}));
-
-const ProfilePage = () => {
+function ProfilePage() {
   const classes = useStyles();
 
-  return (
-    <div>
-      <CssBaseline />
+  const [link, setLink] = useState("https://www.insta.com");
 
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
-            Checkout
-          </Typography>
-        </Paper>
-      </main>
+  const { userContext, setUserContext } = useContext(UserContext);
+  // console.log("signedIn value id", userContext.username);
+
+  if (userContext.linkArray) {
+    console.log("userContext", userContext);
+    console.log("userContext.links", userContext.linkArray[0]);
+  }
+
+  return (
+    <div style={{ maxWidth: "99.2%" }}>
+      <Grid container spacing={2} justify="center">
+        <Grid item xs={11} sm={3}>
+          <SimpleProfileCard />
+        </Grid>
+
+        <Grid item xs={11} sm={7}>
+          {userContext.linkArray
+            ? userContext.linkArray.map((e) => {
+                return (
+                  <div key={e.id}>
+                    <SimpleLinkCard link={e.url} />
+                    <br />
+                  </div>
+                );
+              })
+            : ""}
+        </Grid>
+      </Grid>
     </div>
   );
-};
+}
 
 export default ProfilePage;
