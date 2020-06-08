@@ -10,13 +10,16 @@ import UsernamePage from "./Pages/UsernamePage/UsernamePage";
 import ProfilePage from "./Pages/ProfilePage/ProfilePage";
 import Main from "./Pages/MultiStepForm/Main";
 //Router
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 //Firebase
 import { auth, createProfileDoc, firestore } from "./Firebase/firebase";
 //Material-Ui
 import { Typography } from "@material-ui/core";
 //Context
 import { UserContext } from "./Context/UserContext";
+import NotFoundPage from "./Pages/NotFoundPage/NotFoundPage";
+import SettingsPage from "./Pages/SettingsPage/SettingsPage";
+import GeneralPage from "./Pages/GeneralPage/GeneralPage";
 
 const App = () => {
   //Context values
@@ -69,13 +72,20 @@ const App = () => {
       >
         Happy Links
       </Typography>
-      <Route exact path="/" component={SignIn} />
-      <Route path="/SignUp" component={SignUp} />
-      <Route path="/Signin" component={SignIn} />
-      <Route path="/forgot" component={ForgotPassword} />
-      <Route path="/username" component={UsernamePage} />
-      <Route path="/form" component={Main} />
-      <Route path="/profile" component={ProfilePage} />
+
+      <Switch>
+        <Route exact path="/" component={SignIn} />
+        <Route path="/SignUp" component={SignUp} />
+        <Route path="/Signin" component={SignIn} />
+        <Route path="/forgot" component={ForgotPassword} />
+        <Route path="/username" component={UsernamePage} />
+        <Route path="/form" component={Main} />
+        <Route path="/profile" component={ProfilePage} />
+        <Route path="/settings/:settingsPath" component={SettingsPage} />
+        <Route path="/:general" component={GeneralPage} />
+
+        {/*<Route path="*" component={NotFoundPage} />*/}
+      </Switch>
     </div>
   );
 };

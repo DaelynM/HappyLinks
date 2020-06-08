@@ -1,3 +1,5 @@
+//bbspsmgb 18866693995
+
 import React, { Fragment, useContext, useEffect, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -10,6 +12,10 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore } from "../../Firebase/firebase";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import DoneIcon from "@material-ui/icons/Done";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import ClearIcon from "@material-ui/icons/Clear";
 
 // Destructure props
 const FirstStep = ({
@@ -24,39 +30,54 @@ const FirstStep = ({
   // Check if all values are not empty
   var isEmpty = username.length > 0;
 
-  const [myUsernameCheck, setMyUsernameCheck] = useState("");
+  const [taken, setTaken] = useState(null);
 
-  const myUserName = async () => {
-    var idk = firestore.doc(`/users/${userContext.id}`);
-    const snapShot = await idk.get();
-    //logs that snapshot here
-    console.log("Snapshot here", snapShot.data().username);
-    setMyUsernameCheck(snapShot.data().username);
-    // return snapShot.data().username;
-  };
-
-  const [taken, setTaken] = useState(false); //false means it will work
-
-  //does a check to see if the current
-  if (userContext.username == username) {
+  useEffect(() => {
     firestore
       .collection("users")
       .where("username", "==", username)
       .get()
       .then((snapshot) => {
-        console.log(snapshot);
         if (snapshot.empty) {
-          console.log("not taken top");
           setTaken(false);
+          console.log("no similar username");
         } else {
-          console.log("taken top");
-          myUserName();
-          console.log("nut", myUsernameCheck);
-          console.log("username", username);
-          myUsernameCheck === username ? setTaken(false) : setTaken(true);
+          console.log(
+            "This username has been taken, but now we are checking if it already belongs to you"
+          );
+          var accessDb = firestore
+            .doc(`/users/${userContext.id}`)
+            .get()
+            .then((snapShot) => {
+              return snapShot.data().username;
+            });
+
+          accessDb.then((e) => {
+            console.log("e", e);
+            console.log("eu", username);
+
+            if (e === username) {
+              //if theryre both the same then theyre good
+              setTaken(false);
+            } else {
+              setTaken(true);
+            }
+          });
         }
       });
-  }
+  });
+
+  // }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (taken === true || taken === null) {
+      return;
+    }
+
+    handleNext();
+  };
 
   // const [isEmpty, setIsEmpty] = useState();
 
@@ -81,7 +102,39 @@ const FirstStep = ({
               filedError.username !== "" ? `${filedError.username}` : ""
             }
             required
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {taken ? (
+                    <ClearIcon color="secondary" />
+                  ) : (
+                    <CircularProgress size="20px"></CircularProgress>
+                  )}
+                </InputAdornment>
+              ),
+            }}
           />
+          {taken ? (
+            <div>
+              <Typography
+                variant="overline"
+                display="block"
+                gutterBottom
+                color="secondary"
+              >
+                Username is taken
+              </Typography>
+            </div>
+          ) : (
+            <Typography
+              variant="overline"
+              display="block"
+              gutterBottom
+              color="primary"
+            >
+              Valid Username
+            </Typography>
+          )}
         </Grid>
 
         <Grid item xs={12}>
@@ -93,16 +146,17 @@ const FirstStep = ({
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
       >
-        <form onSubmit={handleNext}></form>
-        <Button
-          variant="contained"
-          disabled={!isEmpty || isError || taken}
-          color="primary"
-          type="submit"
-          // onClick={handleNext}
-        >
-          Next
-        </Button>
+        <form onSubmit={handleSubmit}>
+          <Button
+            variant="contained"
+            disabled={!isEmpty || isError || taken}
+            color="primary"
+            type="submit"
+            //onClick={handleNext}
+          >
+            Next
+          </Button>
+        </form>
       </div>
     </Fragment>
   );

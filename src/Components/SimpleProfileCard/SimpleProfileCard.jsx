@@ -5,10 +5,11 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Link } from "@material-ui/core";
+import { Link, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import { firestore } from "../../Firebase/firebase";
 import { UserContext } from "../../Context/UserContext";
+import SimpleMenu from "../SimpleSettingsMenu/SimpleMenu";
 
 const useStyles = makeStyles({
   root: {},
@@ -41,9 +42,16 @@ const SimpleProfileCard = () => {
       style={{ background: "linear-gradient(0deg,#3358f4,#1d8cf8)" }}
     >
       <CardContent>
-        <Typography className={classes.title} color="primary" gutterBottom>
-          Username
-        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={10}>
+            <Typography className={classes.title} color="primary" gutterBottom>
+              Username
+            </Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <SimpleMenu />
+          </Grid>
+        </Grid>
         <Typography variant="h6" component="h4">
           <Link
             rel="noopener noreferrer"
