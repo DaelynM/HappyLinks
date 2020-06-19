@@ -7,7 +7,10 @@ import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore } from "../../Firebase/firebase";
 
 function GeneralPage({ match }) {
+  const { userContext, setUserContext } = useContext(UserContext);
+
   const [generalUser, setGeneralUser] = useState();
+  var makePrivate = true;
 
   useEffect(() => {
     firestore
@@ -17,23 +20,40 @@ function GeneralPage({ match }) {
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
           console.log(doc.id, " => ", doc.data());
-          setGeneralUser({ id: doc.id, data: doc.data() });
+          setGeneralUser({
+            id: doc.id,
+            data: doc.data(),
+          });
         });
       });
   }, []);
 
   return (
     <div style={{ maxWidth: "99.2%" }}>
+      <p>{generalUser ? generalUser.id : null}</p>
+      <p>{generalUser ? generalUser.data.username : null}</p>
+      <p>{generalUser ? generalUser.data.founderAward : null}</p>
       <Grid container spacing={2} justify="center">
         <Grid item xs={11} sm={3}>
-          <p>Side Bar 1 </p>
-          <p>{generalUser ? generalUser.id : null}</p>
-          <p>{generalUser ? generalUser.data.username : null}</p>
-          <p>{generalUser ? generalUser.data.founderAward : null}</p>
+          {generalUser ? (
+            <SimpleProfileCard
+              makePrivate={makePrivate}
+              firebaseCall={generalUser.data}
+            />
+          ) : null}
         </Grid>
 
         <Grid item xs={11} sm={7}>
-          <p>Links</p>
+          {generalUser
+            ? generalUser.data.linkArray.map((e) => {
+                return (
+                  <div key={e.id}>
+                    <SimpleLinkCard link={e.url} />
+                    <br />
+                  </div>
+                );
+              })
+            : ""}
         </Grid>
       </Grid>
     </div>

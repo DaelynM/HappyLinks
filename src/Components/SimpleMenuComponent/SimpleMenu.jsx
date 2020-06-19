@@ -9,10 +9,12 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import DraftsIcon from "@material-ui/icons/Drafts";
 import SendIcon from "@material-ui/icons/Send";
 import SettingsIcon from "@material-ui/icons/Settings";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import { withRouter } from "react-router-dom";
 
 const StyledMenu = withStyles({
   paper: {
-    border: "1px solid #d3d4d5",
+    backgroundColor: "#232535",
   },
 })((props) => (
   <Menu
@@ -41,7 +43,9 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-export default function SimpleMenu() {
+const SimpleMenu = ({ match, location, username }) => {
+  console.log("match", location.pathname);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -52,13 +56,17 @@ export default function SimpleMenu() {
     setAnchorEl(null);
   };
 
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText("https://happylinks.com/" + username);
+    handleClose();
+  };
+
   return (
     <div>
       <SettingsIcon
         aria-controls="customized-menu"
         aria-haspopup="true"
         variant="contained"
-        color="#ffffff"
         onClick={handleClick}
       />
 
@@ -69,25 +77,21 @@ export default function SimpleMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <StyledMenuItem>
+        <StyledMenuItem onClick={() => alert("ouuuu u touched me")}>
           <ListItemIcon>
-            <SendIcon fontSize="small" />
+            <AssignmentIndIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Sent mail" />
+          <ListItemText primary="Edit Profile" />
         </StyledMenuItem>
-        <StyledMenuItem>
-          <ListItemIcon>
-            <DraftsIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-        </StyledMenuItem>
-        <StyledMenuItem>
+        <StyledMenuItem onClick={copyToClipboard}>
           <ListItemIcon>
             <InboxIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Inbox" />
+          <ListItemText primary="Copy Public Link to Clipboard" />
         </StyledMenuItem>
       </StyledMenu>
     </div>
   );
-}
+};
+
+export default withRouter(SimpleMenu);

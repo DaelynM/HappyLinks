@@ -15,6 +15,11 @@ const theme = createMuiTheme({
   status: {
     danger: "orange",
   },
+  button: {
+    outlined: {
+      border: "#ffffff",
+    },
+  },
 });
 
 export default theme;

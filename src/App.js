@@ -20,6 +20,7 @@ import { UserContext } from "./Context/UserContext";
 import NotFoundPage from "./Pages/NotFoundPage/NotFoundPage";
 import SettingsPage from "./Pages/SettingsPage/SettingsPage";
 import GeneralPage from "./Pages/GeneralPage/GeneralPage";
+import HomePage from "./Pages/HomePage/HomePage";
 
 const App = () => {
   //Context values
@@ -64,24 +65,24 @@ const App = () => {
   return (
     <div>
       <Header />
-      <Typography
+      {/*<Typography
         variant="h2"
         className="test"
         align="center"
         style={{ paddingBottom: "3%" }}
       >
         Happy Links
-      </Typography>
+      </Typography>*/}
 
       <Switch>
-        <Route exact path="/" component={SignIn} />
+        <Route exact path="/" component={HomePage} />
         <Route path="/SignUp" component={SignUp} />
         <Route path="/Signin" component={SignIn} />
         <Route path="/forgot" component={ForgotPassword} />
         <Route path="/username" component={UsernamePage} />
         <Route path="/form" component={Main} />
-        <Route path="/profile" component={ProfilePage} />
         <Route path="/settings/:settingsPath" component={SettingsPage} />
+        <Route path="/profile" component={ProfilePage} />
         <Route path="/:general" component={GeneralPage} />
 
         {/*<Route path="*" component={NotFoundPage} />*/}

@@ -7,9 +7,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Link, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
-import { firestore } from "../../Firebase/firebase";
-import { UserContext } from "../../Context/UserContext";
-import SimpleMenu from "../SimpleSettingsMenu/SimpleMenu";
+import SimpleMenu from "../SimpleMenuComponent/SimpleMenu";
 
 const useStyles = makeStyles({
   root: {},
@@ -31,10 +29,8 @@ const useStyles = makeStyles({
   },
 });
 
-const SimpleProfileCard = () => {
+const SimpleProfileCard = ({ makePrivate, firebaseCall }) => {
   const classes = useStyles();
-
-  const { userContext } = useContext(UserContext);
 
   return (
     <Card
@@ -49,7 +45,7 @@ const SimpleProfileCard = () => {
             </Typography>
           </Grid>
           <Grid item xs={1}>
-            <SimpleMenu />
+            {makePrivate ? "" : <SimpleMenu username={firebaseCall.username} />}
           </Grid>
         </Grid>
         <Typography variant="h6" component="h4">
@@ -59,7 +55,7 @@ const SimpleProfileCard = () => {
             target="_blank"
             color="inherit"
           >
-            @{userContext.username}
+            @{firebaseCall.username}
           </Link>
         </Typography>{" "}
         <Typography className={classes.pos} className={classes.overideColor}>

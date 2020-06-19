@@ -23,7 +23,6 @@ const Header = ({ match, history, location }) => {
           <Link to="/" onClick={() => auth.signOut()}>
             SignOut
           </Link>
-          <Link to="/username"> Username</Link>
           <Link to="/form"> Form</Link>
           <Link to="/profile"> Profile</Link>
         </div>
@@ -32,7 +31,6 @@ const Header = ({ match, history, location }) => {
           <Link to="/">Home</Link>
           <Link to="/signin">SignIn</Link>
           <Link to="/signup">SignUp</Link>
-          <Link to="/username">Username</Link>
         </div>
       )}
     </div>

@@ -1,0 +1,47 @@
+.btn1 button,
+.btn2 button {
+  position: relative;
+  margin: 0 20px;
+  border: none;
+  color: #b3ffff;
+  background: #222;
+  padding: 17px 60px;
+  font-size: 22px;
+  font-weight: 700;
+  text-transform: uppercase;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+button:hover {
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.4);
+}
+.btn1 button:after,
+.btn2 button:after {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 0;
+  height: 490%;
+  width: 140%;
+  transition: all 0.8s ease-in-out;
+}
+.btn1 button:after {
+  background: #ffb3ec;
+  transform: translate(-98%, -25%) rotate(45deg);
+}
+.btn2 button:after {
+  background: #ffb3ec;
+  transform: translate(-9%, -25%) rotate(45deg);
+}
+.btn1:hover button:after {
+  transform: translate(-9%, -25%) rotate(45deg);
+}
+.btn2:hover button:after {
+  transform: translate(-98%, -25%) rotate(45deg);
+}
+button span {
+  position: relative;
+  z-index: 1;
+}

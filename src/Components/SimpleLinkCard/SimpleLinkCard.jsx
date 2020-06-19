@@ -32,7 +32,7 @@ const ImgMediaCard = (props) => {
     >
       <Card className={classes.root}>
         <Grid container>
-          <Grid item xs={11} sm={11}>
+          <Grid item xs={12} sm={12}>
             <CardActionArea>
               <CardContent>
                 <Typography
@@ -49,9 +49,9 @@ const ImgMediaCard = (props) => {
               </CardContent>
             </CardActionArea>
           </Grid>
-          <Grid item sm={1}>
+          {/*<Grid item sm={1}>
             ...
-          </Grid>
+  </Grid>*/}
         </Grid>
       </Card>
     </Link>
