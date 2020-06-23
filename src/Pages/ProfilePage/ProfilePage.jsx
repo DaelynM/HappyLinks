@@ -5,6 +5,7 @@ import SimpleProfileCard from "../../Components/SimpleProfileCard/SimpleProfileC
 import SimpleLinkCard from "../../Components/SimpleLinkCard/SimpleLinkCard";
 import { UserContext } from "../../Context/UserContext";
 import EditLinksComponent from "../../Components/EditLinksComponent/EditLinksComponent";
+import EditProfileForm from "../../Components/EditProfileFormComponent/EditProfileForm";
 
 const useStyles = makeStyles({});
 
@@ -22,6 +23,12 @@ function ProfilePage() {
     setLinkComponent(!linkComponent);
   };
 
+  const [editProfile, setEditProfile] = useState(false);
+
+  const componentSwitchEp = () => {
+    setEditProfile(!editProfile);
+  };
+
   if (userContext.linkArray) {
     console.log("userContext", userContext);
     console.log("userContext.links", userContext.linkArray[0]);
@@ -31,16 +38,21 @@ function ProfilePage() {
     <div style={{ maxWidth: "99.2%" }}>
       <Grid container spacing={2} justify="center">
         <Grid item xs={11} sm={3}>
-          <SimpleProfileCard firebaseCall={userContext} />
+          <SimpleProfileCard
+            firebaseCall={userContext}
+            componentSwitchEp={componentSwitchEp}
+          />
         </Grid>
 
         <Grid item xs={11} sm={7}>
+          {editProfile ? <EditProfileForm /> : null}
+
           {linkComponent ? (
             userContext.linkArray ? (
               userContext.linkArray.map((e) => {
                 return (
                   <div key={e.id}>
-                    <SimpleLinkCard link={e.url} />
+                    <SimpleLinkCard link={e.url} shake={e.shake} />
                     <br />
                   </div>
                 );

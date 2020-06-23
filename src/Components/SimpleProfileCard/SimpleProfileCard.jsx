@@ -29,7 +29,11 @@ const useStyles = makeStyles({
   },
 });
 
-const SimpleProfileCard = ({ makePrivate, firebaseCall }) => {
+const SimpleProfileCard = ({
+  makePrivate,
+  firebaseCall,
+  componentSwitchEp,
+}) => {
   const classes = useStyles();
 
   return (
@@ -45,26 +49,31 @@ const SimpleProfileCard = ({ makePrivate, firebaseCall }) => {
             </Typography>
           </Grid>
           <Grid item xs={1}>
-            {makePrivate ? "" : <SimpleMenu username={firebaseCall.username} />}
+            {makePrivate ? (
+              ""
+            ) : (
+              <SimpleMenu
+                username={firebaseCall.username}
+                componentSwitchEp={componentSwitchEp}
+              />
+            )}
           </Grid>
         </Grid>
         <Typography variant="h6" component="h4">
           <Link
             rel="noopener noreferrer"
-            href="https://www.instagram.com/_vhub/"
+            href={`http://localhost:3000/${firebaseCall.username}`}
             target="_blank"
             color="inherit"
           >
             @{firebaseCall.username}
           </Link>
-        </Typography>{" "}
+        </Typography>
         <Typography className={classes.pos} className={classes.overideColor}>
-          Short Bio
+          {firebaseCall.shortBio}
         </Typography>
         <Typography variant="body2" component="p" className={classes.username}>
-          Long bio
-          <br />
-          {'"a saying for the long bio lorem ipsum idk test this to see wrap"'}
+          {firebaseCall.longBio}
         </Typography>
         <Typography
           className={classes.country}

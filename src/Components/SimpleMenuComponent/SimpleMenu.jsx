@@ -43,7 +43,7 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
-const SimpleMenu = ({ match, location, username }) => {
+const SimpleMenu = ({ match, location, username, componentSwitchEp }) => {
   console.log("match", location.pathname);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -77,7 +77,7 @@ const SimpleMenu = ({ match, location, username }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <StyledMenuItem onClick={() => alert("ouuuu u touched me")}>
+        <StyledMenuItem onClick={componentSwitchEp}>
           <ListItemIcon>
             <AssignmentIndIcon fontSize="small" />
           </ListItemIcon>
