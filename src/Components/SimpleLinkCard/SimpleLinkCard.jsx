@@ -17,15 +17,21 @@ const useStyles = makeStyles({
     background:
       "linear-gradient(90deg, rgba(35,37,53,1) 0%, rgba(35,37,53,1) 46%, rgba(32,31,31,1) 100%)",
   },
+  actionArea: {
+    "&:hover $focusHighlight": {
+      opacity: 0,
+    },
+  },
+  focusHighlight: {},
 });
 
 const ImgMediaCard = (props) => {
   const classes = useStyles();
-  console.log("link", props.link);
-  console.log("shake", props.shake);
+  // console.log("link", props.link);
+  // console.log("shake", props.shake);
 
   return (
-    <div className="box">
+    <div className={props.effect ? "box animate" : null}>
       <Link
         rel="noopener noreferrer"
         href={`https://www.${props.link}`}
@@ -36,7 +42,12 @@ const ImgMediaCard = (props) => {
         <Card className={classes.root}>
           <Grid container>
             <Grid item xs={12} sm={12}>
-              <CardActionArea>
+              <CardActionArea
+                classes={{
+                  root: classes.actionArea,
+                  focusHighlight: classes.focusHighlight,
+                }}
+              >
                 <CardContent>
                   <Typography
                     gutterBottom

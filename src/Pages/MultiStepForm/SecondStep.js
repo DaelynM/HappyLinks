@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { UserContext } from "../../Context/UserContext";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import FlareIcon from "@material-ui/icons/Flare";
 import uuid from "react-uuid";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -35,14 +36,17 @@ const SecondStep = ({
   console.log("signedIn value id", userContext.username);
 
   const [linkArray, setLinkArray] = useState(
-    userContext.linkArray ? userContext.linkArray : [{ id: uuid(), url: "" }]
+    userContext.linkArray
+      ? userContext.linkArray
+      : [{ id: uuid(), url: "", effect: "" }]
   );
 
-  console.log("userContext.links", userContext.linkArray);
-  console.log("linkArray", linkArray);
+  // console.log("userContext.links", userContext.linkArray);
+  // console.log("linkArray", linkArray);
 
   useEffect(() => {
     setUserContext({ ...userContext, linkArray });
+    console.log("linkArray", linkArray);
   }, [linkArray]);
 
   return (
@@ -53,6 +57,7 @@ const SecondStep = ({
 
       <Grid container spacing={3}>
         {linkArray.map((e) => {
+          console.log("la", linkArray);
           return (
             <Grid item xs={12} key={e.id}>
               <TextField
@@ -64,8 +69,10 @@ const SecondStep = ({
                 name="links"
                 onChange={(l) => {
                   const url = l.target.value;
-                  setLinkArray((curLinks) =>
-                    curLinks.map((x) => (x.id === e.id ? { ...x, url } : x))
+                  console.log("url", url);
+                  setLinkArray((allLinks) =>
+                    //if the current link were mapping over is the current link were editing, then add the changes to that node
+                    allLinks.map((x) => (x.id === e.id ? { ...x, url } : x))
                   );
                 }}
                 InputProps={{
@@ -75,7 +82,7 @@ const SecondStep = ({
                     </InputAdornment>
                   ),
                   endAdornment: (
-                    <InputAdornment position="end">
+                    <InputAdornment>
                       <DeleteForeverIcon
                         onClick={() =>
                           setLinkArray((curLinks) =>
@@ -85,6 +92,20 @@ const SecondStep = ({
                       />
                     </InputAdornment>
                   ),
+                  // endAdornment: (
+                  //   <InputAdornment>
+                  //     <FlareIcon
+                  //       onClick={() => {
+                  //         setLinkArray((allLinks) =>
+                  //           //if the current link were mapping over is the current link were editing, then add the changes to that node
+                  //           allLinks.map((x) =>
+                  //             x.id === e.id ? { ...x, effect: "shake" } : x
+                  //           )
+                  //         );
+                  //       }}
+                  //     />
+                  //   </InputAdornment>
+                  // ),
                 }}
               />
             </Grid>
@@ -96,7 +117,9 @@ const SecondStep = ({
         className={classes.button}
         variant="contained"
         color="primary"
-        onClick={() => setLinkArray([...linkArray, { id: uuid(), url: "" }])}
+        onClick={() =>
+          setLinkArray([...linkArray, { id: uuid(), url: "", effect: "" }])
+        }
       >
         Add Another Link
       </Button>

@@ -35,8 +35,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = () => {
+const SignUp = ({ history }) => {
   const classes = useStyles();
+
+  console.log("history", history);
 
   const [signUpState, setSignUpState] = useState({
     displayName: "",
@@ -73,7 +75,7 @@ const SignUp = () => {
       await createProfileDoc(user, { displayName, firstName, lastName });
 
       //this will clear my form
-      console.log("clear");
+      console.log("submitted");
       setSignUpState({
         displayName: "",
         firstName: "",
@@ -82,6 +84,8 @@ const SignUp = () => {
         password: "",
         comfirmPassword: "",
       });
+
+      history.push("/form");
     } catch (error) {
       console.log(error);
     }
@@ -93,7 +97,7 @@ const SignUp = () => {
       [e.target.name]: e.target.value,
     });
 
-    console.log(e.target.name + " " + e.target.value);
+    // console.log(e.target.name + " " + e.target.value);
   };
 
   return (

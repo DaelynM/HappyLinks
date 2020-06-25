@@ -44,7 +44,7 @@ const StyledMenuItem = withStyles((theme) => ({
 }))(MenuItem);
 
 const SimpleMenu = ({ match, location, username, componentSwitchEp }) => {
-  console.log("match", location.pathname);
+  // console.log("match", location.pathname);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 

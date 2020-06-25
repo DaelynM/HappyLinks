@@ -12,7 +12,7 @@ const useStyles = makeStyles({
 
 const Header = ({ match, history, location }) => {
   const { userContext } = useContext(UserContext);
-  console.log("signedIn value", userContext);
+  //console.log("signedIn value", userContext);
   const classes = useStyles();
 
   return (

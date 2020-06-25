@@ -16,7 +16,6 @@ const labels = ["Username", "Links", "Review Profile"];
 
 const StepForm = () => {
   const { userContext, setUserContext } = useContext(UserContext);
-  console.log("userContext", userContext.firstName);
 
   const [steps, setSteps] = useState(0);
   const [fields, setFields] = useState({

@@ -7,6 +7,7 @@ import { firestore } from "../../Firebase/firebase";
 
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import FlareIcon from "@material-ui/icons/Flare";
 
 import { red } from "@material-ui/core/colors";
 
@@ -25,8 +26,12 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
 
   const { userContext, setUserContext } = useContext(UserContext);
 
+  const [colorSwap, setColorSwap] = useState(true);
+
   const [linkArray, setLinkArray] = useState(
-    userContext.linkArray ? userContext.linkArray : [{ id: uuid(), url: "" }]
+    userContext.linkArray
+      ? userContext.linkArray
+      : [{ id: uuid(), url: "", effect: false }]
   );
 
   useEffect(() => {
@@ -53,9 +58,9 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
           return (
             <Grid item xs={12} key={e.id}>
               <TextField
+                style={{ width: "95%" }}
                 required
                 label="Link"
-                fullWidth
                 type="url"
                 value={e.url || ""}
                 name="links"
@@ -80,6 +85,18 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
                           )
                         }
                       />
+                      <FlareIcon
+                        onClick={() => {
+                          setLinkArray((allLinks) =>
+                            //if the current link were mapping over is the current link were editing, then add the changes to that node
+                            allLinks.map((x) =>
+                              x.id === e.id && x.effect != null
+                                ? { ...x, effect: !x.effect }
+                                : x
+                            )
+                          );
+                        }}
+                      />
                     </InputAdornment>
                   ),
                 }}
@@ -93,7 +110,9 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
         className={classes.button}
         variant="contained"
         color="primary"
-        onClick={() => setLinkArray([...linkArray, { id: uuid(), url: "" }])}
+        onClick={() =>
+          setLinkArray([...linkArray, { id: uuid(), url: "", effect: false }])
+        }
       >
         Add Another Link
       </Button>

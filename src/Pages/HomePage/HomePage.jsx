@@ -7,6 +7,7 @@ import "./neonButton.scss";
 import banner from "./images/banner.png";
 import socials from "./images/socials.png";
 import ParticlesComponent from "../../Components/ParticlesComponent/ParticlesComponent";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,16 +90,18 @@ const HomePage = ({ match }) => {
               <Typography variant="h2" className={classes.neonGreenSm}>
                 Create your free links in less than 60 seconds.
               </Typography>
-              <Button
-                className={classes.signupbtn}
-                variant="outlined"
-                color="primary"
-              >
-                Sign Up
-              </Button>
+              <Link to="signup">
+                <Button
+                  className={classes.signupbtn}
+                  variant="outlined"
+                  color="primary"
+                >
+                  Sign Up
+                </Button>
+              </Link>
               <br />
 
-              <Typography variant="span">
+              <Typography variant="body2">
                 HappyLinks let you quickly link to anywhere on the internet.
                 It’s your digital glossary, your public bookmarks, your front
                 door to the internet. So where will you send people?

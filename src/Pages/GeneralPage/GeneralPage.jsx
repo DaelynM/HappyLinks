@@ -48,7 +48,7 @@ function GeneralPage({ match }) {
             ? generalUser.data.linkArray.map((e) => {
                 return (
                   <div key={e.id}>
-                    <SimpleLinkCard link={e.url} />
+                    <SimpleLinkCard link={e.url} effect={e.effect} />
                     <br />
                   </div>
                 );

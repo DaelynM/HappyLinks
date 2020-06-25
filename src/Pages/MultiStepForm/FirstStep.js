@@ -26,7 +26,6 @@ const FirstStep = ({
   isError,
 }) => {
   const { userContext, setUserContext } = useContext(UserContext);
-  console.log("userContext", userContext.firstName);
   // Check if all values are not empty
   var isEmpty = username.length > 0;
 
@@ -139,7 +138,7 @@ const FirstStep = ({
 
         <Grid item xs={12}>
           <Typography variant="overline" display="block" gutterBottom>
-            https://happylinks.com/{userContext.username}
+            https://happylinks.com/{username}
           </Typography>
         </Grid>
       </Grid>

@@ -12,24 +12,18 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { UserContext } from "../../Context/UserContext";
-import { firestore } from "../../Firebase/firebase";
+import firebase, { firestore } from "../../Firebase/firebase";
 
-//firebase
-import { createProfileDoc, auth } from "../../Firebase/firebase";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import DoneIcon from "@material-ui/icons/Done";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import ClearIcon from "@material-ui/icons/Clear";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(0),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -40,10 +34,6 @@ const EditProfileForm = () => {
   const classes = useStyles();
   const { userContext, setUserContext } = useContext(UserContext);
   const [taken, setTaken] = useState(null);
-  // var isEmpty = updateProfile.username.length > 0;
-
-  console.log("dp", userContext);
-  console.log("dp", userContext.lastName);
 
   //if it already exisit in the seshion then retreive it
   const [updateProfile, setUpdateProfile] = useState({
@@ -58,15 +48,53 @@ const EditProfileForm = () => {
       ...updateProfile,
       [e.target.name]: e.target.value,
     });
+  };
 
-    console.log(e.target.name + " " + e.target.value);
-    console.log(e.target.name + " " + updateProfile.shortBio);
+  const taskManager = async () => {
+    var checker2;
+    const checker = await firestore
+      .collection("users")
+      .where("username", "==", updateProfile.username)
+      .get()
+      .then(async (snapshot) => {
+        if (snapshot.empty) {
+          console.log("not taken 1");
+          return false;
+        } else {
+          checker2 = await firestore
+            .doc(`/users/${userContext.id}`)
+            .get()
+            .then((snapShot) => {
+              return snapShot.data().username;
+            })
+            .then((e) => {
+              if (e === updateProfile.username) {
+                console.log("not taken 2");
+                return false;
+              } else {
+                console.log("taken 1");
+                return true;
+              }
+            });
+        }
+      });
+
+    if (checker == false) {
+      return checker;
+    } else {
+      return checker2;
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (taken === true || taken === null) {
+    const newData = await taskManager();
+    setTaken(newData);
+    console.log("new newData", newData);
+    console.log("\n");
+
+    if (newData === true || newData === null) {
       return;
     } else {
       setUserContext({ ...userContext, updateProfile });
@@ -88,41 +116,6 @@ const EditProfileForm = () => {
     }
   };
 
-  useEffect(() => {
-    firestore
-      .collection("users")
-      .where("username", "==", updateProfile.username)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          setTaken(false);
-          console.log("no similar username");
-        } else {
-          console.log(
-            "This username has been taken, but now we are checking if it already belongs to you"
-          );
-          var accessDb = firestore
-            .doc(`/users/${userContext.id}`)
-            .get()
-            .then((snapShot) => {
-              return snapShot.data().username;
-            });
-
-          accessDb.then((e) => {
-            console.log("e", e);
-            console.log("eu", updateProfile.username);
-
-            if (e === updateProfile.username) {
-              //if theryre both the same then theyre good
-              setTaken(false);
-            } else {
-              setTaken(true);
-            }
-          });
-        }
-      });
-  });
-
   return (
     <Container component="main" maxWidth="md">
       <CssBaseline />
@@ -136,9 +129,21 @@ const EditProfileForm = () => {
                 variant="outlined"
                 fullWidth
                 id="username"
-                label="Username"
+                label={taken ? "Username is taken" : "Username"}
                 autoFocus
                 onChange={updateField}
+                autoComplete="off"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {taken ? (
+                        <ClearIcon color="secondary" />
+                      ) : (
+                        <CircularProgress size="20px"></CircularProgress>
+                      )}
+                    </InputAdornment>
+                  ),
+                }}
               />
             </Grid>
             <Grid item xs={12}>
@@ -174,7 +179,6 @@ const EditProfileForm = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={taken}
           >
             Save Profile Settings
           </Button>

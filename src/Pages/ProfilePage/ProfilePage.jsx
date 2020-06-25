@@ -29,10 +29,10 @@ function ProfilePage() {
     setEditProfile(!editProfile);
   };
 
-  if (userContext.linkArray) {
-    console.log("userContext", userContext);
-    console.log("userContext.links", userContext.linkArray[0]);
-  }
+  // if (userContext.linkArray) {
+  //   console.log("userContext", userContext);
+  //   console.log("userContext.links", userContext.linkArray[0]);
+  // }
 
   return (
     <div style={{ maxWidth: "99.2%" }}>
@@ -52,7 +52,7 @@ function ProfilePage() {
               userContext.linkArray.map((e) => {
                 return (
                   <div key={e.id}>
-                    <SimpleLinkCard link={e.url} shake={e.shake} />
+                    <SimpleLinkCard link={e.url} effect={e.effect} />
                     <br />
                   </div>
                 );

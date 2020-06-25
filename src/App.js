@@ -35,8 +35,8 @@ const App = () => {
 
         //this allows me to see the snapshot at the current interval in time, and shows me the data for the user thats signed in: use console.log("S", snapShot.data()); to see all the data
         userReference.onSnapshot((snapShot) => {
-          console.log("S", snapShot.data());
-          console.log("SID", snapShot.id);
+          //console.log("S", snapShot.data());
+          //console.log("SID", snapShot.id);
           //gets the id of the user, and assigns the data to it
           setUserContext({ id: snapShot.id, ...snapShot.data() });
         });
