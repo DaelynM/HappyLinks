@@ -28,7 +28,7 @@ const App = () => {
 
   useEffect(() => {
     const unsubsribeFromAuth = auth.onAuthStateChanged(async (userObj) => {
-      // console.log("userObj", userObj);
+      console.log("userObj", userObj);
 
       if (userObj != null) {
         const userReference = await createProfileDoc(userObj);
@@ -82,7 +82,10 @@ const App = () => {
         <Route path="/username" component={UsernamePage} />
         <Route path="/form" component={Main} />
         <Route path="/settings/:settingsPath" component={SettingsPage} />
-        <Route path="/profile" component={ProfilePage} />
+        <Route
+          path="/profile"
+          render={() => <ProfilePage extras={userContext} />}
+        />
         <Route path="/:general" component={GeneralPage} />
 
         {/*<Route path="*" component={NotFoundPage} />*/}

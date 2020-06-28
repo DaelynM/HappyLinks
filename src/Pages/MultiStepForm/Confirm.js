@@ -36,9 +36,15 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
   const updateUsername = () => {
     if (userContext) {
       const userReference = firestore.doc(`/users/${userContext.id}`);
+      const userReferencePrivate = firestore.doc(
+        `/privateData/${userContext.id}`
+      );
       userReference.update({
         username: userContext.username,
         linkArray: userContext.linkArray,
+      });
+      userReferencePrivate.update({
+        username: userContext.username,
       });
     }
     handleNext();
@@ -97,18 +103,23 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
     <Fragment>
       <List disablePadding>
         <ListItem className={classes.listItem}>
-          <ListItemText primary="Username" secondary={userContext.username} />
-          <Typography variant="body2">{userContext.username}</Typography>
+          <ListItemText
+            primary="Username"
+            secondary={`https://cloutlinks.com/${userContext.username}`}
+          />
+          <Typography variant="body2">@{userContext.username}</Typography>
         </ListItem>
-        {userContext.linkArray.map((e) => (
-          <ListItem className={classes.listItem} key={e.id}>
-            <ListItemText
-              primary={`Link ${e.url}`}
-              secondary={idShoterner(e.id)}
-            />
-            <Typography variant="body2">{e.url}</Typography>
-          </ListItem>
-        ))}
+        {userContext.linkArray
+          ? userContext.linkArray.map((e) => (
+              <ListItem className={classes.listItem} key={e.id}>
+                <ListItemText
+                  primary={`Link ${e.url}`}
+                  secondary={idShoterner(e.id)}
+                />
+                <Typography variant="body2">{e.url}</Typography>
+              </ListItem>
+            ))
+          : null}
 
         <Divider />
       </List>

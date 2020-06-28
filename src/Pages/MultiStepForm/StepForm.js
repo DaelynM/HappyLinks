@@ -8,6 +8,45 @@ import Confirm from "./Confirm";
 import Success from "./Success";
 import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore } from "../../Firebase/firebase";
+import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    position: "relative",
+  },
+  layout: {
+    width: "auto",
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: "auto",
+      marginRight: "auto",
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3),
+    },
+  },
+  stepper: {
+    padding: theme.spacing(3, 1, 5),
+  },
+  buttons: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  button: {
+    marginTop: theme.spacing(3),
+    marginLeft: theme.spacing(1),
+  },
+}));
 
 const emailRegex = RegExp(/^[^@]+@[^@]+\.[^@]+$/);
 const phoneRegex = RegExp(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4,6})$/);
@@ -15,6 +54,8 @@ const phoneRegex = RegExp(/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4,6})$/);
 const labels = ["Username", "Links", "Review Profile"];
 
 const StepForm = () => {
+  const classes = useStyles();
+
   const { userContext, setUserContext } = useContext(UserContext);
 
   const [steps, setSteps] = useState(0);
@@ -142,14 +183,17 @@ const StepForm = () => {
   // Handle components
   return (
     <Fragment>
+      {steps != 3 ? (
+        <Typography component="h1" variant="h4" align="center">
+          Create Your Clout Profile
+        </Typography>
+      ) : null}
+
       {steps === labels.length ? (
         <Success />
       ) : (
         <Fragment>
-          <Stepper
-            activeStep={steps}
-            style={{ paddingTop: 30, paddingBottom: 50 }}
-          >
+          <Stepper activeStep={steps} className={classes.stepper}>
             {labels.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>

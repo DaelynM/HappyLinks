@@ -34,10 +34,14 @@ export const createProfileDoc = async (authParam, extraParam) => {
   // console.log("auth", authParam.uid);
   //userReference will get the collection of the user with the uid / sign in user
   const userReference = firestore.doc(`/users/${authParam.uid}`);
+  const userReferencePrivate = firestore.doc(`/privateData/${authParam.uid}`);
+
   //this is will give us the firebase snaphot object that tells if the user already exisits and their uid again
   const snapShot = await userReference.get();
+  const snapShot2 = await userReferencePrivate.get();
   //logs that snapshot here
   console.log("Snapshot here", snapShot);
+  console.log("Snapshot2 here", snapShot2);
 
   //if the user does not exisit, we will create one here
   if (snapShot.exists === false) {
@@ -55,13 +59,17 @@ export const createProfileDoc = async (authParam, extraParam) => {
       await response.json().then((e) => {
         const signUpIp = e.ip;
         try {
+          userReferencePrivate.set({
+            username,
+            signUpIp,
+          });
           userReference.set({
             displayName,
             firstName,
             lastName,
             email,
             createdAt,
-            signUpIp,
+            //signUpIp,
             founderAward,
             username,
             links,

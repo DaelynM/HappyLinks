@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,9 @@ import Container from "@material-ui/core/Container";
 import { Link as RouterLink } from "react-router-dom";
 //firebase
 import { SignInWithGoogle, auth } from "../../Firebase/firebase";
+import LoaderComponent from "../LoaderComponent/LoaderComponent";
+import LoaderPopover from "../LoaderComponent/LoaderPopoverComponent";
+import { UserContext } from "../../Context/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(0, 0, 2),
   },
   errorMessage: {
     margin: theme.spacing(3, 0, 2),
@@ -46,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = () => {
   const classes = useStyles();
 
+  const { userContext, setUserContext } = useContext(UserContext);
+
+  const [submited, setSubmited] = useState(false);
+
   const [signInState, setSignInState] = useState({
     email: "",
     password: "",
@@ -59,10 +66,20 @@ const SignIn = () => {
 
     try {
       await auth.signInWithEmailAndPassword(email, password);
+      console.log("successful login");
+      setSubmited(true);
     } catch (err) {
       setSignInState({ ...signInState, validate: false });
       console.log("error occured when signing in");
     }
+
+    console.log("signed in here 2");
+  };
+
+  const handleGoogleSignIn = async () => {
+    await SignInWithGoogle();
+
+    setSubmited(true);
   };
 
   return (
@@ -125,7 +142,7 @@ const SignIn = () => {
           </Button>
 
           <Button
-            onClick={SignInWithGoogle}
+            onClick={handleGoogleSignIn}
             fullWidth
             variant="contained"
             color="primary"
@@ -137,26 +154,23 @@ const SignIn = () => {
             Don't have an account yet?
           </Typography>
 
-          <Link variant="body2" component={RouterLink} to="/signup">
-            <Typography align="center" variant="subtitle1">
-              Sign up for HappyLinks.com
-            </Typography>
-          </Link>
-
           <Grid container>
             <Grid item xs>
-              <Link href="/forgot" variant="body2">
-                Forgot password?
+              <Link variant="body2" component={RouterLink} to="/signup">
+                <Typography variant="subtitle1">Forgot Password?</Typography>
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link variant="body2" component={RouterLink} to="/signup">
+                <Typography align="center" variant="subtitle1">
+                  Sign up for HappyLinks.com
+                </Typography>
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
+      {/*submited ? <LoaderPopover /> : ""*/}
     </Container>
   );
 };

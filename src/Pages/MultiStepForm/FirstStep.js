@@ -113,32 +113,22 @@ const FirstStep = ({
               ),
             }}
           />
-          {taken ? (
-            <div>
-              <Typography
-                variant="overline"
-                display="block"
-                gutterBottom
-                color="secondary"
-              >
-                Username is taken
-              </Typography>
-            </div>
-          ) : (
+
+          <div>
             <Typography
               variant="overline"
               display="block"
               gutterBottom
-              color="primary"
+              color={`${taken ? "secondary" : "primary"}`}
             >
-              Valid Username
+              {taken ? "Username is taken" : "Valid Username"}
             </Typography>
-          )}
+          </div>
         </Grid>
 
         <Grid item xs={12}>
           <Typography variant="overline" display="block" gutterBottom>
-            https://happylinks.com/{username}
+            https://cloutlinks.com/{username}
           </Typography>
         </Grid>
       </Grid>

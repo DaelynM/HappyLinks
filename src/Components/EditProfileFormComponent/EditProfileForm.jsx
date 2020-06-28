@@ -40,6 +40,7 @@ const EditProfileForm = () => {
     shortBio: userContext.shortBio ? userContext.shortBio : "",
     longBio: userContext.longBio ? userContext.longBio : "",
     username: userContext.username ? userContext.username : "",
+    country: userContext.country ? userContext.country : "",
   });
 
   //gets the text from the field and updates state
@@ -105,10 +106,20 @@ const EditProfileForm = () => {
   const update = () => {
     if (userContext) {
       const userReference = firestore.doc(`/users/${userContext.id}`);
+      const userReferencePrivate = firestore.doc(
+        `/privateData/${userContext.id}`
+      );
       userReference.set(
         {
           shortBio: updateProfile.shortBio,
           longBio: updateProfile.longBio,
+          username: updateProfile.username,
+          country: updateProfile.country,
+        },
+        { merge: true }
+      );
+      userReferencePrivate.set(
+        {
           username: updateProfile.username,
         },
         { merge: true }
@@ -168,6 +179,18 @@ const EditProfileForm = () => {
                 label="Long bio"
                 multiline
                 rows="2"
+                autoFocus
+                onChange={updateField}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name="country"
+                variant="outlined"
+                value={updateProfile.country}
+                fullWidth
+                id="country"
+                label="Country"
                 autoFocus
                 onChange={updateField}
               />

@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { Link, Grid } from "@material-ui/core";
 import Box from "@material-ui/core/Box";
 import SimpleMenu from "../SimpleMenuComponent/SimpleMenu";
+import LocationOnIcon from "@material-ui/icons/LocationOn";
 
 const useStyles = makeStyles({
   root: {},
@@ -69,19 +70,30 @@ const SimpleProfileCard = ({
             @{firebaseCall.username}
           </Link>
         </Typography>
-        <Typography className={classes.pos} className={classes.overideColor}>
-          {firebaseCall.shortBio}
+        <Typography
+          className={classes.pos}
+          className={classes.overideColor}
+          fontWeight="fontWeightBold"
+        >
+          <b>{firebaseCall.shortBio}</b>
         </Typography>
         <Typography variant="body2" component="p" className={classes.username}>
           {firebaseCall.longBio}
         </Typography>
-        <Typography
-          className={classes.country}
-          color="textSecondary"
-          gutterBottom
-        >
-          Country
-        </Typography>
+
+        {firebaseCall.country ? (
+          <div>
+            <Typography
+              className={classes.country}
+              color="textSecondary"
+              gutterBottom
+            >
+              <LocationOnIcon /> {firebaseCall.country}
+            </Typography>
+          </div>
+        ) : (
+          ""
+        )}
       </CardContent>
     </Card>
   );

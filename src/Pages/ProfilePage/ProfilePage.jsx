@@ -36,58 +36,60 @@ function ProfilePage() {
 
   return (
     <div style={{ maxWidth: "99.2%" }}>
-      <Grid container spacing={2} justify="center">
-        <Grid item xs={11} sm={3}>
-          <SimpleProfileCard
-            firebaseCall={userContext}
-            componentSwitchEp={componentSwitchEp}
-          />
-        </Grid>
-
-        <Grid item xs={11} sm={7}>
-          {editProfile ? <EditProfileForm /> : null}
-
-          {linkComponent ? (
-            userContext.linkArray ? (
-              userContext.linkArray.map((e) => {
-                return (
-                  <div key={e.id}>
-                    <SimpleLinkCard link={e.url} effect={e.effect} />
-                    <br />
-                  </div>
-                );
-              })
-            ) : (
-              ""
-            )
-          ) : (
-            <EditLinksComponent
-              editLinks={userContext.linkArray}
-              componentSwitch={componentSwitch}
+      {userContext && (
+        <Grid container spacing={2} justify="center">
+          <Grid item xs={11} sm={3}>
+            <SimpleProfileCard
+              firebaseCall={userContext}
+              componentSwitchEp={componentSwitchEp}
             />
-          )}
+          </Grid>
 
-          {linkComponent ? (
-            userContext.linkArray ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  style={{ marginRight: 20 }}
-                  onClick={componentSwitch}
+          <Grid item xs={11} sm={7}>
+            {editProfile ? <EditProfileForm /> : null}
+
+            {linkComponent ? (
+              userContext.linkArray ? (
+                userContext.linkArray.map((e) => {
+                  return (
+                    <div key={e.id}>
+                      <SimpleLinkCard link={e.url} effect={e.effect} />
+                      <br />
+                    </div>
+                  );
+                })
+              ) : (
+                ""
+              )
+            ) : (
+              <EditLinksComponent
+                editLinks={userContext.linkArray}
+                componentSwitch={componentSwitch}
+              />
+            )}
+
+            {linkComponent ? (
+              userContext.linkArray ? (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  Add / Edit Linksss
-                </Button>
-              </div>
-            ) : null
-          ) : null}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ marginRight: 20 }}
+                    onClick={componentSwitch}
+                  >
+                    Add / Edit Linksss
+                  </Button>
+                </div>
+              ) : null
+            ) : null}
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </div>
   );
 }

@@ -26,8 +26,6 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
 
   const { userContext, setUserContext } = useContext(UserContext);
 
-  const [colorSwap, setColorSwap] = useState(true);
-
   const [linkArray, setLinkArray] = useState(
     userContext.linkArray
       ? userContext.linkArray
@@ -86,6 +84,7 @@ const EditLinksComponent = ({ editLinks, componentSwitch }) => {
                         }
                       />
                       <FlareIcon
+                        color={`${e.effect ? "secondary" : "primary"}`}
                         onClick={() => {
                           setLinkArray((allLinks) =>
                             //if the current link were mapping over is the current link were editing, then add the changes to that node

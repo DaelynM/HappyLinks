@@ -38,8 +38,6 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = ({ history }) => {
   const classes = useStyles();
 
-  console.log("history", history);
-
   const [signUpState, setSignUpState] = useState({
     displayName: "",
     firstName: "",
