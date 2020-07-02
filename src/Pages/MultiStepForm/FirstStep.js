@@ -11,11 +11,15 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import { UserContext } from "../../Context/UserContext";
-import firebase, { firestore } from "../../Firebase/firebase";
+import firebase, { firestore, storage } from "../../Firebase/firebase";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import DoneIcon from "@material-ui/icons/Done";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ClearIcon from "@material-ui/icons/Clear";
+import { Fab, IconButton } from "@material-ui/core";
+import FileUploadLoader from "../../Components/FileUploadBarComponent/FileUploadBar";
+import PictureUpload from "../../Components/PictureUploadComponent/PictureUpload";
+import PictureUpload2 from "../../Components/PictureUploadComponent/PictureUpload2";
 
 // Destructure props
 const FirstStep = ({
@@ -65,7 +69,6 @@ const FirstStep = ({
         }
       });
   });
-
   // }
 
   const handleSubmit = async (event) => {
@@ -77,8 +80,6 @@ const FirstStep = ({
 
     handleNext();
   };
-
-  // const [isEmpty, setIsEmpty] = useState();
 
   return (
     <Fragment>
@@ -127,11 +128,16 @@ const FirstStep = ({
         </Grid>
 
         <Grid item xs={12}>
+          <PictureUpload2 />
+        </Grid>
+
+        <Grid item xs={12}>
           <Typography variant="overline" display="block" gutterBottom>
             https://cloutlinks.com/{username}
           </Typography>
         </Grid>
       </Grid>
+
       <div
         style={{ display: "flex", marginTop: 50, justifyContent: "flex-end" }}
       >

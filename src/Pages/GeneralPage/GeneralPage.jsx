@@ -6,7 +6,29 @@ import SimpleLinkCard from "../../Components/SimpleLinkCard/SimpleLinkCard";
 import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore } from "../../Firebase/firebase";
 
+const useStyles = makeStyles((theme) => ({
+  button: {
+    display: "block",
+    marginTop: theme.spacing(2),
+  },
+  center: {
+    textAlign: "center",
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    // minWidth: 100,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  fixSelectionBox: {
+    textAlign: "center",
+  },
+}));
+
 function GeneralPage({ match }) {
+  const classes = useStyles();
+
   const { userContext, setUserContext } = useContext(UserContext);
 
   const [generalUser, setGeneralUser] = useState();
@@ -29,10 +51,12 @@ function GeneralPage({ match }) {
   }, []);
 
   return (
-    <div style={{ maxWidth: "99.2%" }}>
+    <div>
       <p>{generalUser ? generalUser.id : null}</p>
+      <p>{generalUser ? generalUser.data.signUpIp : null}</p>
       <p>{generalUser ? generalUser.data.username : null}</p>
       <p>{generalUser ? generalUser.data.founderAward : null}</p>
+      <p>{generalUser ? generalUser.data.profilePic : null}</p>
       <Grid container spacing={2} justify="center">
         <Grid item xs={11} sm={3}>
           {generalUser ? (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -7,12 +7,15 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import LoaderComponent from "./LoaderComponent";
+import { UserContext } from "../../Context/UserContext";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function LoaderPopover() {
+  const { userContext, setUserContext } = useContext(UserContext);
+
   const [open, setOpen] = React.useState(true);
 
   return (
@@ -31,7 +34,10 @@ export default function LoaderPopover() {
           <DialogContentText id="alert-dialog-slide-description" align="center">
             You will be redirected very shortly
           </DialogContentText>
-          <LoaderComponent whereTo="/form" time="400" />
+          <LoaderComponent
+            whereTo={userContext ? "/form" : "/profile"}
+            time="400"
+          />
         </DialogContent>
       </Dialog>
     </div>

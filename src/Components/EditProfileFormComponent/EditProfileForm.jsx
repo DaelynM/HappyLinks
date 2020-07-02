@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProfileForm = () => {
+const EditProfileForm = ({ componentSwitchEp }) => {
   const classes = useStyles();
   const { userContext, setUserContext } = useContext(UserContext);
   const [taken, setTaken] = useState(null);
@@ -100,6 +100,7 @@ const EditProfileForm = () => {
     } else {
       setUserContext({ ...userContext, updateProfile });
       update();
+      componentSwitchEp();
     }
   };
 

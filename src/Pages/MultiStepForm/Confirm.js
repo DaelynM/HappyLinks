@@ -42,6 +42,7 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
       userReference.update({
         username: userContext.username,
         linkArray: userContext.linkArray,
+        profilePic: userContext.profilePic,
       });
       userReferencePrivate.update({
         username: userContext.username,

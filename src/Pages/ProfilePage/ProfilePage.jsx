@@ -35,7 +35,7 @@ function ProfilePage() {
   // }
 
   return (
-    <div style={{ maxWidth: "99.2%" }}>
+    <div>
       {userContext && (
         <Grid container spacing={2} justify="center">
           <Grid item xs={11} sm={3}>
@@ -46,7 +46,9 @@ function ProfilePage() {
           </Grid>
 
           <Grid item xs={11} sm={7}>
-            {editProfile ? <EditProfileForm /> : null}
+            {editProfile ? (
+              <EditProfileForm componentSwitchEp={componentSwitchEp} />
+            ) : null}
 
             {linkComponent ? (
               userContext.linkArray ? (

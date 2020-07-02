@@ -4,11 +4,14 @@ import { withRouter, Link } from "react-router-dom";
 import { UserContext } from "../../Context/UserContext";
 import { makeStyles } from "@material-ui/core/styles";
 import { Grid, Paper } from "@material-ui/core";
+import LoggedIn from "./LoggedIn";
+import LoggedOut from "./LoggedOut";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     paddingTop: "2vh",
+    paddingBottom: "2vh",
   },
   paper: {
     padding: theme.spacing(2),
@@ -26,28 +29,56 @@ const Header = ({ match, history, location }) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={3} justify="center">
-        <Grid item xs={2}>
-          <Link to="/">
-            <h3>Image here</h3>
-          </Link>
-        </Grid>
-        <Grid item xs={5} />
-
-        <Grid item xs={3} className={classes.center}>
-          <Link to="/signin">
-            <h5>Sign In</h5>
-          </Link>
-        </Grid>
-        <Link to="/" onClick={() => auth.signOut()}>
-          SignOut
-        </Link>
-      </Grid>
+      {!userContext ? <LoggedIn /> : <LoggedOut />}
     </div>
   );
 };
 
 export default withRouter(Header);
+
+// return (
+//   <div className={classes.root}>
+//     {!userContext ? (
+//       <Grid container spacing={3} justify="center">
+// <Grid item xs={2}>
+//   <Link to="/">
+//     <h3>Image here</h3>
+//   </Link>
+// </Grid>
+//         <Grid item xs={5} />
+
+//         <Grid item xs={3} className={classes.center}>
+//           <Link to="/signin">
+//             <h5>Sign In</h5>
+//           </Link>
+//         </Grid>
+//       </Grid>
+//     ) : (
+//       <Grid container spacing={3} justify="center">
+//         <Grid item xs={1} />
+//         <Grid item xs={2}>
+//           <Link to="/">Image here</Link>
+//         </Grid>
+//         <Grid item xs={1} />
+//         <Grid item xs={1} className={classes.center}>
+//           <Link to="/">Home</Link>
+//         </Grid>
+//         <Grid item xs={1} className={classes.center}>
+//           <Link to="/" onClick={() => auth.signOut()}>
+//             SignOut
+//           </Link>
+//         </Grid>
+//         <Grid item xs={1} className={classes.center}>
+//           <Link to="/form">Form</Link>
+//         </Grid>
+//         <Grid item xs={1} className={classes.center}>
+//           <Link to="/profile">Profile</Link>
+//         </Grid>
+//         <Grid item xs={4} />
+//       </Grid>
+//     )}
+//   </div>
+// );
 
 // <div className={classes.root}>
 // <Grid container spacing={3} justify="center">

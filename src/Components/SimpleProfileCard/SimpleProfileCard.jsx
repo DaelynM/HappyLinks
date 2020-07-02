@@ -28,6 +28,13 @@ const useStyles = makeStyles({
   overideColor: {
     color: "#fff",
   },
+  imageFormat: {
+    width: "15vh",
+    display: "block",
+    marginLeft: "32%",
+    marginRight: "auto",
+    width: "50%",
+  },
 });
 
 const SimpleProfileCard = ({
@@ -45,9 +52,13 @@ const SimpleProfileCard = ({
       <CardContent>
         <Grid container spacing={1}>
           <Grid item xs={10}>
-            <Typography className={classes.title} color="primary" gutterBottom>
+            {/*<Typography className={classes.title} color="primary" gutterBottom>
               Username
-            </Typography>
+  </Typography>*/}
+            <img
+              src={firebaseCall.profilePic}
+              className={classes.imageFormat}
+            />
           </Grid>
           <Grid item xs={1}>
             {makePrivate ? (

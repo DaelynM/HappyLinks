@@ -21,6 +21,8 @@ import NotFoundPage from "./Pages/NotFoundPage/NotFoundPage";
 import SettingsPage from "./Pages/SettingsPage/SettingsPage";
 import GeneralPage from "./Pages/GeneralPage/GeneralPage";
 import HomePage from "./Pages/HomePage/HomePage";
+import CopyRight from "./Components/CopyRightComponent/CopyRight";
+import StickyFooter from "./Components/CopyRightComponent/CopyRight";
 
 const App = () => {
   //Context values
@@ -31,7 +33,10 @@ const App = () => {
       console.log("userObj", userObj);
 
       if (userObj != null) {
+        console.log("userObj2221");
+
         const userReference = await createProfileDoc(userObj);
+        console.log("userObj3", userObj);
 
         //this allows me to see the snapshot at the current interval in time, and shows me the data for the user thats signed in: use console.log("S", snapShot.data()); to see all the data
         userReference.onSnapshot((snapShot) => {
@@ -40,12 +45,16 @@ const App = () => {
           //gets the id of the user, and assigns the data to it
           setUserContext({ id: snapShot.id, ...snapShot.data() });
         });
+
+        console.log("userObj2", userObj);
       } else {
         //pretty much just set the user back to null, as not signed in user is signed out
         console.log("userObjv2", userObj);
         setUserContext(userObj);
       }
     });
+
+    console.log("userObj1");
 
     return () => unsubsribeFromAuth();
   }, []);
