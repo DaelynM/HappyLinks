@@ -1,9 +1,8 @@
 import FileUploadLoader from "../FileUploadBarComponent/FileUploadBar";
 import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore, storage } from "../../Firebase/firebase";
-import SaveIcon from "@material-ui/icons/Save";
 
-import "./btn.scss";
+import SaveIcon from "@material-ui/icons/Save";
 
 import React, {
   useState,
@@ -14,21 +13,7 @@ import React, {
 } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { TextField, Typography, makeStyles, Button } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
-  input: {
-    display: "none",
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-}));
+import { makeStyles, Button } from "@material-ui/core";
 
 // Setting a high pixel ratio avoids blurriness in the canvas crop preview.
 const pixelRatio = 4;
@@ -69,12 +54,12 @@ function generateDownload(previewCanvas, crop, imageName, handleFileUpload) {
   canvas.toBlob(
     (blob) => {
       console.log("blob", blob);
-      const previewUrl = window.URL.createObjectURL(blob);
+      // const previewUrl = window.URL.createObjectURL(blob);
 
-      anchor.href = URL.createObjectURL(blob);
-      anchor.click();
+      // anchor.href = URL.createObjectURL(blob);
+      // anchor.click();
 
-      window.URL.revokeObjectURL(previewUrl);
+      // window.URL.revokeObjectURL(previewUrl);
 
       var file = new File([blob], imageName);
       console.log("file", file);
@@ -83,9 +68,24 @@ function generateDownload(previewCanvas, crop, imageName, handleFileUpload) {
     "image/png",
     1
   );
+  console.log("anchor.downlaod", anchor.downlaod);
 }
 
 // LSFz4jwT.sMfiYQ
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: "none",
+  },
+  button: {
+    margin: theme.spacing(1),
+  },
+}));
 
 const PictureUpload2 = () => {
   const classes = useStyles();
@@ -146,13 +146,15 @@ const PictureUpload2 = () => {
     console.log(completedCrop);
   }, [completedCrop]);
 
-  const handleFileUpload = (file) => {
+  const handleFileUpload = async (file) => {
     console.log("start of upload");
 
     console.log("start of upload image", image);
     console.log("start of upload file", file);
 
-    const uploadTask = storage.ref(`/images/${image.name}`).put(file);
+    const uploadTask = storage
+      .ref(`/images/${userContext.id}/${image.name}`)
+      .put(file);
 
     uploadTask.on(
       "state_changed",
@@ -166,17 +168,25 @@ const PictureUpload2 = () => {
       },
       (err) => {
         //catches the errors
+        console("bitch");
         console.log(err);
       },
       () => {
         // gets the functions from storage refences the image storage in firebase by the children
         // gets the download url then sets the image from firebase as the value for the imgUrl key:
         storage
-          .ref("images")
+          .ref(`images/${userContext.id}`)
           .child(file.name)
           .getDownloadURL()
           .then((fireBaseUrl) => {
             setUserContext({ ...userContext, profilePic: fireBaseUrl });
+
+            const userReference = firestore.doc(`/users/${userContext.id}`);
+            console.log("fireBaseUrl", fireBaseUrl);
+
+            userReference.update({
+              profilePic: fireBaseUrl,
+            });
 
             console.log(fireBaseUrl);
           });
@@ -188,39 +198,37 @@ const PictureUpload2 = () => {
 
   return (
     <div>
-      <div>
-        <input
-          accept="image/*"
-          className={classes.input}
-          id="contained-button-file"
-          type="file"
-          onChange={onSelectFile}
-        />
-        <label htmlFor="contained-button-file">
-          <Button variant="contained" color="primary" component="span">
-            Upload Profile Pic
-          </Button>
-        </label>
-
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          startIcon={<SaveIcon />}
-          type="button"
-          disabled={!completedCrop?.width || !completedCrop?.height}
-          onClick={() =>
-            generateDownload(
-              previewCanvasRef.current,
-              completedCrop,
-              image.name,
-              handleFileUpload
-            )
-          }
-        >
-          Save Image
+      <input
+        accept="image/*"
+        className={classes.input}
+        id="contained-button-file"
+        type="file"
+        onChange={onSelectFile}
+      />
+      <label htmlFor="contained-button-file">
+        <Button variant="contained" color="primary" component="span">
+          Upload Profile Pic
         </Button>
-      </div>
+      </label>
+
+      <Button
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        startIcon={<SaveIcon />}
+        type="button"
+        disabled={!completedCrop?.width || !completedCrop?.height}
+        onClick={() =>
+          generateDownload(
+            previewCanvasRef.current,
+            completedCrop,
+            image.name,
+            handleFileUpload
+          )
+        }
+      >
+        Save Image
+      </Button>
       <ReactCrop
         circularCrop
         src={upImg}
@@ -232,21 +240,13 @@ const PictureUpload2 = () => {
       <div>
         <canvas
           ref={previewCanvasRef}
-          // style={{
-          //   width: completedCrop?.width ?? 0,
-          //   height: completedCrop?.height ?? 0,
-          // }}
-
           style={{
-            width: "25vh",
-            height: "25vh",
-            borderRadius: "50%",
+            width: completedCrop?.width ?? 0,
+            height: completedCrop?.height ?? 0,
           }}
         />
       </div>
-
       <FileUploadLoader val={progress} />
-      {/*userContext ? userContext.profilePic : null*/}
     </div>
   );
 };
