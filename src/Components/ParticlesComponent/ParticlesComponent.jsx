@@ -6,6 +6,7 @@ const ParticlesComponent = () => {
   return (
     <Particles
       className="particleBackground"
+      style={{ opacity: "0.4" }}
       params={{
         particles: {
           number: {

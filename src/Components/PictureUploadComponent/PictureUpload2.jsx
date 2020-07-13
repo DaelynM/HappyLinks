@@ -1,6 +1,7 @@
 import FileUploadLoader from "../FileUploadBarComponent/FileUploadBar";
 import { UserContext } from "../../Context/UserContext";
 import firebase, { firestore, storage } from "../../Firebase/firebase";
+import Grid from "@material-ui/core/Grid";
 
 import SaveIcon from "@material-ui/icons/Save";
 
@@ -82,8 +83,9 @@ const useStyles = makeStyles((theme) => ({
   input: {
     display: "none",
   },
+
   button: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(0),
   },
 }));
 
@@ -91,6 +93,8 @@ const PictureUpload2 = () => {
   const classes = useStyles();
 
   const [image, setImage] = useState(null);
+  const [renderProgress, setRenderProgress] = useState(false);
+
   const [progress, setProgress] = useState(0);
   const [upImg, setUpImg] = useState();
   const imgRef = useRef(null);
@@ -198,55 +202,64 @@ const PictureUpload2 = () => {
 
   return (
     <div>
-      <input
-        accept="image/*"
-        className={classes.input}
-        id="contained-button-file"
-        type="file"
-        onChange={onSelectFile}
-      />
-      <label htmlFor="contained-button-file">
-        <Button variant="contained" color="primary" component="span">
-          Upload Profile Pic
-        </Button>
-      </label>
-
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.button}
-        startIcon={<SaveIcon />}
-        type="button"
-        disabled={!completedCrop?.width || !completedCrop?.height}
-        onClick={() =>
-          generateDownload(
-            previewCanvasRef.current,
-            completedCrop,
-            image.name,
-            handleFileUpload
-          )
-        }
-      >
-        Save Image
-      </Button>
-      <ReactCrop
-        circularCrop
-        src={upImg}
-        onImageLoaded={onLoad}
-        crop={crop}
-        onChange={(c) => setCrop(c)}
-        onComplete={(c) => setCompletedCrop(c)}
-      />
-      <div>
-        <canvas
-          ref={previewCanvasRef}
-          style={{
-            width: completedCrop?.width ?? 0,
-            height: completedCrop?.height ?? 0,
-          }}
+      <Grid container justify="space-between">
+        <input
+          accept="image/*"
+          className={classes.input}
+          id="contained-button-file"
+          type="file"
+          onChange={onSelectFile}
         />
-      </div>
-      <FileUploadLoader val={progress} />
+        <label htmlFor="contained-button-file" style={{ marginBottom: "0px" }}>
+          <Button variant="contained" color="primary" component="span">
+            Upload Profile Pic
+          </Button>
+        </label>
+
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          startIcon={<SaveIcon />}
+          type="button"
+          disabled={!completedCrop?.width || !completedCrop?.height}
+          onClick={() =>
+            generateDownload(
+              previewCanvasRef.current,
+              completedCrop,
+              image.name,
+              handleFileUpload
+            ) ?? setRenderProgress(true)
+          }
+        >
+          Save
+        </Button>
+      </Grid>
+      {renderProgress ? <FileUploadLoader val={progress} /> : null}
+
+      <Grid container justify="center">
+        <div style={{ paddingTop: "2vh" }}>
+          <ReactCrop
+            circularCrop
+            src={upImg}
+            onImageLoaded={onLoad}
+            crop={crop}
+            onChange={(c) => setCrop(c)}
+            onComplete={(c) => setCompletedCrop(c)}
+          />
+        </div>
+
+        <div style={{ display: "none" }}>
+          <canvas
+            ref={previewCanvasRef}
+            style={{
+              width: completedCrop?.width ?? 0,
+              height: completedCrop?.height ?? 0,
+              borderRadius: "50%",
+            }}
+          />
+        </div>
+      </Grid>
     </div>
   );
 };

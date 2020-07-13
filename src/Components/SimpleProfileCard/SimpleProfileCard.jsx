@@ -31,9 +31,17 @@ const useStyles = makeStyles({
   imageFormat: {
     width: "15vh",
     display: "block",
-    marginLeft: "32%",
-    marginRight: "auto",
-    width: "50%",
+    margin: "0 2vh 0 0",
+    width: "90%",
+    borderRadius: "50%",
+  },
+  subInfo: {
+    fontSize: 14,
+    color: "#fff",
+  },
+
+  center: {
+    textAlign: "center",
   },
 });
 
@@ -43,6 +51,15 @@ const SimpleProfileCard = ({
   componentSwitchEp,
 }) => {
   const classes = useStyles();
+
+  console.log("LA", firebaseCall.linkArray);
+
+  const numOfLinks = () => {
+    if (firebaseCall.linkArray) {
+      var count = firebaseCall.linkArray.length;
+      return count;
+    }
+  };
 
   return (
     <Card
@@ -55,10 +72,32 @@ const SimpleProfileCard = ({
             {/*<Typography className={classes.title} color="primary" gutterBottom>
               Username
   </Typography>*/}
-            <img
-              src={firebaseCall.profilePic}
-              className={classes.imageFormat}
-            />
+            <Grid
+              container
+              spacing={1}
+              justify="space-evenly"
+              alignItems="center"
+            >
+              <Grid item xs={5}>
+                <img
+                  src={firebaseCall.profilePic}
+                  className={classes.imageFormat}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Typography className={classes.center}>
+                  Views
+                  <br />
+                  N/A
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Typography className={classes.center}>
+                  Links <br />
+                  {numOfLinks()}
+                </Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={1}>
             {makePrivate ? (
@@ -71,7 +110,7 @@ const SimpleProfileCard = ({
             )}
           </Grid>
         </Grid>
-        <Typography variant="h6" component="h4">
+        <Typography variant="h6" component="h4" style={{ marginTop: "2vh" }}>
           <Link
             rel="noopener noreferrer"
             href={`http://localhost:3000/${firebaseCall.username}`}

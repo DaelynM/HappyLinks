@@ -33,17 +33,19 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
 
   const classes = useStyles();
 
-  const updateUsername = () => {
+  const updateUsername = async () => {
     if (userContext) {
       const userReference = firestore.doc(`/users/${userContext.id}`);
-      const userReferencePrivate = firestore.doc(
-        `/privateData/${userContext.id}`
-      );
+
       userReference.update({
-        username: userContext.username,
+        username: username,
         linkArray: userContext.linkArray,
         profilePic: userContext.profilePic,
       });
+
+      const userReferencePrivate = firestore.doc(
+        `/privateData/${userContext.id}`
+      );
       userReferencePrivate.update({
         username: userContext.username,
       });
@@ -108,7 +110,7 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
             primary="Username"
             secondary={`https://cloutlinks.com/${userContext.username}`}
           />
-          <Typography variant="body2">@{userContext.username}</Typography>
+          <Typography variant="body2">@{username}</Typography>
         </ListItem>
         {userContext.linkArray
           ? userContext.linkArray.map((e) => (

@@ -35,50 +35,104 @@ const FirstStep = ({
 
   const [taken, setTaken] = useState(null);
 
-  useEffect(() => {
-    firestore
+  // useEffect(() => {
+  //   firestore
+  //     .collection("users")
+  //     .where("username", "==", username)
+  //     .get()
+  //     .then((snapshot) => {
+  //       if (snapshot.empty) {
+  //         setTaken(false);
+  //         console.log("no similar username");
+  //       } else {
+  //         console.log(
+  //           "This username has been taken, but now we are checking if it already belongs to you"
+  //         );
+  //         var accessDb = firestore
+  //           .doc(`/users/${userContext.id}`)
+  //           .get()
+  //           .then((snapShot) => {
+  //             return snapShot.data().username;
+  //           });
+
+  //         accessDb.then((e) => {
+  //           console.log("e", e);
+  //           console.log("eu", username);
+
+  //           if (e === username) {
+  //             //if theryre both the same then theyre good
+  //             setTaken(false);
+  //           } else {
+  //             setTaken(true);
+  //           }
+  //         });
+  //       }
+  //     });
+  // });
+
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+
+  //   if (taken === true || taken === null) {
+  //     return;
+  //   }
+
+  //   handleNext();
+  // };
+
+  const taskManager = async () => {
+    var checker2;
+    const checker = await firestore
       .collection("users")
       .where("username", "==", username)
       .get()
-      .then((snapshot) => {
+      .then(async (snapshot) => {
         if (snapshot.empty) {
           setTaken(false);
-          console.log("no similar username");
+          console.log("not taken 1");
+          return false;
         } else {
-          console.log(
-            "This username has been taken, but now we are checking if it already belongs to you"
-          );
-          var accessDb = firestore
+          checker2 = await firestore
             .doc(`/users/${userContext.id}`)
             .get()
             .then((snapShot) => {
               return snapShot.data().username;
+            })
+            .then((e) => {
+              if (e === username) {
+                console.log("not taken 2");
+                setTaken(false);
+
+                return false;
+              } else {
+                console.log("taken 1");
+                setTaken(true);
+
+                return true;
+              }
             });
-
-          accessDb.then((e) => {
-            console.log("e", e);
-            console.log("eu", username);
-
-            if (e === username) {
-              //if theryre both the same then theyre good
-              setTaken(false);
-            } else {
-              setTaken(true);
-            }
-          });
         }
       });
-  });
-  // }
+
+    if (checker == false) {
+      return checker;
+    } else {
+      return checker2;
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (taken === true || taken === null) {
-      return;
-    }
+    const newData = await taskManager();
+    setTaken(newData);
 
-    handleNext();
+    if (newData === true || newData === null) {
+      return;
+    } else {
+      console.log("username here", username);
+      handleNext();
+    }
   };
 
   return (
@@ -90,7 +144,11 @@ const FirstStep = ({
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label="Username"
+            label={
+              <span style={{ color: taken ? "red" : "#1583f9" }}>
+                {taken ? "Username Is Taken" : "Valid Username"}
+              </span>
+            }
             name="username"
             placeholder="Your username..."
             autoComplete="off"
@@ -115,26 +173,45 @@ const FirstStep = ({
             }}
           />
 
-          <div>
+          {/*<Grid container justify="space-between">
             <Typography
-              variant="overline"
-              display="block"
-              gutterBottom
+              inline
+              variant="body1"
+              align="left"
               color={`${taken ? "secondary" : "primary"}`}
             >
               {taken ? "Username is taken" : "Valid Username"}
             </Typography>
-          </div>
+            <Typography inline variant="body1" align="right">
+              https://cloutlinks.com/{username}
+            </Typography>
+          </Grid>*/}
+
+          {/*<div>
+            <Typography
+              variant="overline"
+              color={`${taken ? "secondary" : "primary"}`}
+            >
+              {taken ? "Username is taken" : "Valid Username"}
+            </Typography>
+
+            <Typography variant="overline">
+              https://cloutlinks.com/{username}
+            </Typography>
+          </div>*/}
+
+          <Grid item xs={12}>
+            <Typography variant="overline" display="block" gutterBottom>
+              https://cloutlinks.com/{username}
+            </Typography>
+          </Grid>
         </Grid>
 
         <Grid item xs={12}>
-          <PictureUpload2 />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Typography variant="overline" display="block" gutterBottom>
-            https://cloutlinks.com/{username}
+          <Typography variant="h6" gutterBottom style={{ marginBottom: "1vh" }}>
+            Add Profile Image
           </Typography>
+          <PictureUpload2 />
         </Grid>
       </Grid>
 
@@ -144,7 +221,7 @@ const FirstStep = ({
         <form onSubmit={handleSubmit}>
           <Button
             variant="contained"
-            disabled={!isEmpty || isError || taken}
+            disabled={!isEmpty || isError}
             color="primary"
             type="submit"
             //onClick={handleNext}

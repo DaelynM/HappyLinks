@@ -38,7 +38,7 @@ const FileUploadLoader = ({ val }) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} style={{ marginTop: "2vh" }}>
       <LinearProgressWithLabel value={val} />
     </div>
   );
