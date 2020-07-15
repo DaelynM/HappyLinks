@@ -11,9 +11,14 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import LoaderPopover from "../LoaderComponent/LoaderPopoverComponent";
 
 //firebase
-import { createProfileDoc, auth } from "../../Firebase/firebase";
+import {
+  createProfileDoc,
+  auth,
+  SignInWithGoogle,
+} from "../../Firebase/firebase";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -98,6 +103,14 @@ const SignUp = ({ history }) => {
     // console.log(e.target.name + " " + e.target.value);
   };
 
+  const [submited, setSubmited] = useState(false);
+
+  const handleGoogleSignIn = async () => {
+    await SignInWithGoogle();
+
+    setSubmited(true);
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -108,8 +121,24 @@ const SignUp = ({ history }) => {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
+
         <form className={classes.form} onSubmit={handleSubmit}>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={handleGoogleSignIn}
+              >
+                Sign Up With Google
+              </Button>
+            </Grid>
+
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              OR
+            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="fname"
@@ -173,7 +202,6 @@ const SignUp = ({ history }) => {
                 onChange={updateField}
               />
             </Grid>
-
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -190,6 +218,7 @@ const SignUp = ({ history }) => {
           >
             Sign Up
           </Button>
+
           <Grid container justify="flex-end">
             <Grid item>
               <Link href="#" variant="body2">
@@ -199,6 +228,7 @@ const SignUp = ({ history }) => {
           </Grid>
         </form>
       </div>
+      {submited ? <LoaderPopover /> : null}
     </Container>
   );
 };

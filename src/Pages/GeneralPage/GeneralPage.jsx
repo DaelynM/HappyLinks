@@ -51,13 +51,13 @@ function GeneralPage({ match }) {
   }, []);
 
   return (
-    <div>
-      <p>{generalUser ? generalUser.id : null}</p>
+    <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
+      {/*<p>{generalUser ? generalUser.id : null}</p>
       <p>{generalUser ? generalUser.data.signUpIp : null}</p>
       <p>{generalUser ? generalUser.data.username : null}</p>
       <p>{generalUser ? generalUser.data.founderAward : null}</p>
-      <p>{generalUser ? generalUser.data.profilePic : null}</p>
-      <Grid container spacing={2} justify="center">
+  <p>{generalUser ? generalUser.data.profilePic : null}</p>*/}
+      <Grid container spacing={3} justify="center">
         <Grid item xs={11} sm={3}>
           {generalUser ? (
             <SimpleProfileCard

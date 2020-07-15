@@ -40,7 +40,7 @@ const Confirm = ({ handleNext, handleBack, values: { username } }) => {
       userReference.update({
         username: username,
         linkArray: userContext.linkArray,
-        profilePic: userContext.profilePic,
+        profilePic: userContext.profilePic ? userContext.profilePic : null,
       });
 
       const userReferencePrivate = firestore.doc(

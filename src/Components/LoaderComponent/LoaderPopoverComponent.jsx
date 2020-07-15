@@ -34,10 +34,13 @@ export default function LoaderPopover() {
           <DialogContentText id="alert-dialog-slide-description" align="center">
             You will be redirected very shortly
           </DialogContentText>
-          <LoaderComponent
-            whereTo={userContext ? "/form" : "/profile"}
-            time="400"
-          />
+
+          {userContext ? (
+            <LoaderComponent
+              whereTo={userContext.username ? "/profile" : "/form"}
+              time="400"
+            />
+          ) : null}
         </DialogContent>
       </Dialog>
     </div>

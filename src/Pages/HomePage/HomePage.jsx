@@ -104,7 +104,6 @@ const HomePage = ({ match }) => {
 
         <Grid
           container
-          spacing={2}
           justify="center"
           alignItems="center"
           style={{ padding: "3vh 0 5vh 0", height: "90vh" }}

@@ -20,6 +20,15 @@ import { Fab, IconButton } from "@material-ui/core";
 import FileUploadLoader from "../../Components/FileUploadBarComponent/FileUploadBar";
 import PictureUpload from "../../Components/PictureUploadComponent/PictureUpload";
 import PictureUpload2 from "../../Components/PictureUploadComponent/PictureUpload2";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  input: {
+    "&:invalid": {
+      border: "red solid 2px",
+    },
+  },
+}));
 
 // Destructure props
 const FirstStep = ({
@@ -34,6 +43,9 @@ const FirstStep = ({
   var isEmpty = username.length > 0;
 
   const [taken, setTaken] = useState(null);
+  const [correct, setCorrect] = useState(true);
+
+  const classes = useStyles();
 
   // useEffect(() => {
   //   firestore
@@ -127,6 +139,14 @@ const FirstStep = ({
     const newData = await taskManager();
     setTaken(newData);
 
+    if (/^[A-Za-z0-9]+$/.test(username)) {
+      console.log("valid");
+    } else {
+      console.log("invalid");
+      setCorrect(false);
+      return;
+    }
+
     if (newData === true || newData === null) {
       return;
     } else {
@@ -145,13 +165,18 @@ const FirstStep = ({
           <TextField
             fullWidth
             label={
-              <span style={{ color: taken ? "red" : "#1583f9" }}>
-                {taken ? "Username Is Taken" : "Valid Username"}
+              <span style={{ color: taken || !correct ? "red" : "#1583f9" }}>
+                {correct
+                  ? taken
+                    ? "Username Is Taken"
+                    : "Valid Username"
+                  : "please only use numbers and letters"}
               </span>
             }
             name="username"
             placeholder="Your username..."
             autoComplete="off"
+            required
             defaultValue={username}
             onChange={handleChange("username")}
             margin="normal"

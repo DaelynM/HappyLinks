@@ -35,9 +35,9 @@ function ProfilePage() {
   // }
 
   return (
-    <div>
+    <div style={{ overflowX: "hidden", overflowY: "hidden" }}>
       {userContext && (
-        <Grid container spacing={2} justify="center">
+        <Grid container justify="center" spacing={3}>
           <Grid item xs={11} sm={3}>
             <SimpleProfileCard
               firebaseCall={userContext}

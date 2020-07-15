@@ -67,7 +67,7 @@ const SimpleProfileCard = ({
       style={{ background: "linear-gradient(0deg,#3358f4,#1d8cf8)" }}
     >
       <CardContent>
-        <Grid container spacing={1}>
+        <Grid container spacing={0}>
           <Grid item xs={10}>
             {/*<Typography className={classes.title} color="primary" gutterBottom>
               Username
@@ -113,7 +113,7 @@ const SimpleProfileCard = ({
         <Typography variant="h6" component="h4" style={{ marginTop: "2vh" }}>
           <Link
             rel="noopener noreferrer"
-            href={`http://localhost:3000/${firebaseCall.username}`}
+            href={`http://cloutlinks.com/${firebaseCall.username}`}
             target="_blank"
             color="inherit"
           >
